@@ -20,4 +20,15 @@ describe('AtendeeServiceTest', () => {
         expect(createdAtendee).toEqual(searchedAtendee);
 
     });
+    it('t02_createAtendeeWithoutName ', () => {
+        let atendee = new Atendee();
+        let service = new AtendeeService();
+
+        try {
+            service.create(atendee);
+            fail('Accepted atendee without name');
+        } catch (ex) {
+            expect('Name is mandatory').toEqual(ex.message);
+        }
+    });
 });
