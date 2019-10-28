@@ -60,4 +60,40 @@ describe('AtendeeServiceTest', () => {
             expect(expectedExceptionMessage).toEqual(ex.message);
         }
     });
+
+    it('t04_createAtendeeWithAutomaticFields', () => {
+        const aName: string = 'Hermanoteu';
+
+        // creating first atendee
+        let atendee = new Atendee();
+        atendee.name = aName;
+        atendee.id = 123;
+
+        let failMessage = "Test failed because the system accepted to create atendee with id already set";
+        let expectedExceptionMessage = "Atendee id cannot be set";
+
+        try {
+            service.create(atendee);
+            fail(failMessage);
+        } catch (ex) {
+            expect(expectedExceptionMessage).toEqual(ex.message);
+        }
+
+        let atendee2 = new Atendee();
+        atendee2.name = aName;
+        atendee2.setCreation(new Date());
+
+        failMessage = "Test failed because the system accepted to create atendee with creation already set";
+        expectedExceptionMessage = "Atendee creation cannot be set";
+
+
+        try {
+            service.create(atendee2);
+            fail(failMessage);
+        } catch (ex) {
+            expect(expectedExceptionMessage).toEqual(ex.message);
+        }
+
+    });
+
 });
