@@ -10,6 +10,13 @@ describe('AtendeeServiceTest', () => {
         service = new AtendeeService();
     });
 
+    it('validateAtendee', function () {
+        let atendee: Atendee = new Atendee();
+        expect(atendee.id).not.toEqual(0);
+        expect(atendee.getCreation()).not.toBeUndefined;
+        expect(atendee.name).not.toEqual('');
+    })
+
     it('t01_createAtendee', function () {
 
         // create object
