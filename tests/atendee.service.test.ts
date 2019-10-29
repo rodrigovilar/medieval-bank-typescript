@@ -120,4 +120,24 @@ describe('AtendeeServiceTest', () => {
         tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
 
+    it('t6_updateAtendee', () => {
+
+        let atendee = new Atendee();
+        atendee.name = 'Hermanoteu';
+        atendee.email = 'hermanoteu@email.com';
+        let createdAtendee = service.create(atendee);
+
+        let otherName = 'Francisco';
+        let otherEmail = 'francisco@email.com';
+        createdAtendee.name = otherName;
+        createdAtendee.email = otherEmail;
+
+        let updatedAtendee = service.update(createdAtendee);
+
+        expect(createdAtendee.name).toEqual(otherName);
+        expect(createdAtendee.email).toEqual(otherEmail);
+        expect(createdAtendee.id).toEqual(createdAtendee.id);
+        expect(createdAtendee.getCreation()).toEqual(createdAtendee.getCreation());
+    });
+
 });
