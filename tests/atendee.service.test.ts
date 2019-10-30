@@ -28,7 +28,7 @@ describe('AtendeeServiceTest', () => {
 
         serviceHelper.validateAtendee(EXAMPLE_NAME, '', createdAtendee);
 
-        const searchedAtendee = service.getOne(createdAtendee.id);
+        let searchedAtendee: Atendee = service.getOne(createdAtendee.id);
 
         expect(createdAtendee).toEqual(searchedAtendee);
 
@@ -100,5 +100,24 @@ describe('AtendeeServiceTest', () => {
     });
 
     it('t06_updateAtendee', () => {
+
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
+
+        const otherName: string = 'Other Name';
+        const otherEmail: string = 'other@email.com';
+
+        createdAtendee.name = otherName;
+        createdAtendee.email = otherEmail;
+
+        let updatedAtendee: Atendee = service.update(createdAtendee);
+
+        serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
+
+        expect(createdAtendee.id).not.toBeNull();
+        expect(createdAtendee.getCreation).not.toBeNull();
+
+        let searchedAtendee: Atendee = service.getOne(updatedAtendee.id);
+        expect(updatedAtendee).toEqual(searchedAtendee);
+
     });
 });
