@@ -1,41 +1,32 @@
+import { AtendeeServiceHelper } from './atendee.service.test.helper';
 import { AtendeeService } from "../src/atendee/atendee.service";
 import { Atendee } from "../src/atendee/atendee";
 
-function tryCreateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
-    expectedExceptionMessage: string): void {
-    try {
-        service.create(atendee);
-        fail(failMessage);
-    } catch (ex) {
-        expect(expectedExceptionMessage).toEqual(ex.message);
-    }
-}
+
 
 describe('AtendeeServiceTest', () => {
 
     let service: AtendeeService;
+
+    let serviceHelper: AtendeeServiceHelper;
+
+    const EXAMPLE_NAME: string = 'A Name';
+
+    const EXAMPLE_EMAIL: string = 'a@a.com';
+
+    const EXAMPLE_SSN: string = '623-76-7120';
 
     // This function is called *before each test specification*, *it* function, has been run.
     beforeEach(() => {
         service = new AtendeeService();
     });
 
-    it('validateAtendee', function () {
-        let atendee: Atendee = new Atendee();
-        expect(atendee.id).not.toEqual(0);
-        expect(atendee.getCreation()).not.toBeUndefined;
-        expect(atendee.name).not.toEqual('');
-    })
-
     it('t01_createAtendee', function () {
 
         // create object
-        let atendee = new Atendee();
-        atendee.name = 'A name';
-        const createdAtendee = service.create(atendee);
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, '');
 
-        expect(createdAtendee.id).not.toBeUndefined;
-        expect(createdAtendee.date).not.toBeUndefined;
+        serviceHelper.validateAtendee(EXAMPLE_NAME, '', createdAtendee);
 
         const searchedAtendee = service.getOne(createdAtendee.id);
 
@@ -55,7 +46,7 @@ describe('AtendeeServiceTest', () => {
         const failMessage: string = 'Test failed because the system accepted to create atendee without name';
         const expectedExceptionMessage: string = "Name is mandatory";
 
-        tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
 
     it('t03_atendeeNameDuplicated', () => {
@@ -74,7 +65,7 @@ describe('AtendeeServiceTest', () => {
         const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
         const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
 
-        tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+        serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
     });
 
     it('t04_createAtendeeWithAutomaticFields', () => {
@@ -88,7 +79,7 @@ describe('AtendeeServiceTest', () => {
         let failMessage = "Test failed because the system accepted to create atendee with id already set";
         let expectedExceptionMessage = "Atendee id cannot be set";
 
-        tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
         let atendee2 = new Atendee();
         atendee2.name = aName;
@@ -97,7 +88,7 @@ describe('AtendeeServiceTest', () => {
         failMessage = "Test failed because the system accepted to create atendee with creation already set";
         expectedExceptionMessage = "Atendee creation cannot be set";
 
-        tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+        serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
     });
 
     it('t05_createAtendeeWithInvalidEmail', () => {
@@ -111,13 +102,15 @@ describe('AtendeeServiceTest', () => {
         const expectedExceptionMessage = "Atendee e-mail format is invalid";
 
         atendee.email = 'ssdd@.dd';
-        tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
         atendee.email = 'sdsdfa#gmail.com';
-        tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
         atendee.email = 'sdsdfa@gmail';
-        tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
 
+    it('t06_updateAtendee', () => {
+    });
 });
