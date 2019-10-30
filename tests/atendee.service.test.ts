@@ -62,11 +62,11 @@ describe('AtendeeServiceTest', () => {
     });
 
     it('t04_createAtendeeWithAutomaticFields', () => {
-        const aName: string = 'Hermanoteu';
+        
 
         // creating first atendee
         let atendee = new Atendee();
-        atendee.name = aName;
+        atendee.name = EXAMPLE_NAME;
         atendee.id = 123;
 
         let failMessage = "Test failed because the system accepted to create atendee with id already set";
@@ -75,11 +75,8 @@ describe('AtendeeServiceTest', () => {
         serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
         let atendee2 = new Atendee();
-        atendee2.name = aName;
+        atendee2.name = EXAMPLE_NAME;
         atendee2.setCreation(new Date());
-
-        failMessage = "Test failed because the system accepted to create atendee with creation already set";
-        expectedExceptionMessage = "Atendee creation cannot be set";
 
         serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
     });
