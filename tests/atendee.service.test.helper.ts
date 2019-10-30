@@ -20,12 +20,24 @@ export class AtendeeServiceHelper{
         }
     }
 
-    public createAtendee(service: AtendeeService,name: string, email: string): Atendee {
+    public tryUpdateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
+        expectedExceptionMessage: string): void {
+        try {
+            service.update(atendee);
+            fail(failMessage);
+        } catch (ex) {
+            expect(expectedExceptionMessage).toEqual(ex.message);
+        }
+    }
+
+    public createAtendee(service: AtendeeService,name: string, email: string, ssn: string): Atendee {
         let atendee = new Atendee();
         atendee.name = name;
         atendee.email = email;
+        atendee.ssn = ssn;
         service.create(atendee);
 
         return service.create(atendee);
     }
+
 }

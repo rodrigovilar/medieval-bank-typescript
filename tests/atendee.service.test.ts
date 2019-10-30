@@ -24,7 +24,7 @@ describe('AtendeeServiceTest', () => {
     it('t01_createAtendee', function () {
 
         // create object
-        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, '');
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, '', '');
 
         serviceHelper.validateAtendee(EXAMPLE_NAME, '', createdAtendee);
 
@@ -47,7 +47,7 @@ describe('AtendeeServiceTest', () => {
     it('t03_atendeeNameDuplicated', () => {
 
         // creating first atendee
-        serviceHelper.createAtendee(service, EXAMPLE_NAME, '');
+        serviceHelper.createAtendee(service, EXAMPLE_NAME, '', '');
 
         // creating second atendee
         let atendee2 = new Atendee();
@@ -101,7 +101,7 @@ describe('AtendeeServiceTest', () => {
 
     it('t06_updateAtendee', () => {
 
-        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL);
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, '');
 
         const otherName: string = 'Other Name';
         const otherEmail: string = 'other@email.com';
@@ -118,6 +118,19 @@ describe('AtendeeServiceTest', () => {
 
         let searchedAtendee: Atendee = service.getOne(updatedAtendee.id);
         expect(updatedAtendee).toEqual(searchedAtendee);
+
+    });
+
+    it('t07_updateAtendeeWithImmutableFields', () => {
+
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+        
+        createdAtendee.ssn = '670-03-8924';
+
+        const failMessage: string = 'Test failed because the system accepted to update atendee with a new SSN';
+        const expectedExceptionMessage: string = 'Atendee SSN is immutable';
+
+        serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 
     });
 });
