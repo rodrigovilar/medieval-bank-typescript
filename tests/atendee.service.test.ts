@@ -40,24 +40,22 @@ describe('AtendeeServiceTest', () => {
         const failMessage: string = 'Test failed because the system accepted to create atendee without name';
 
         const expectedExceptionMessage: string = 'Name is mandatory';
-        
+
         serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
 
     it('t03_atendeeNameDuplicated', () => {
 
-        const aName: string = 'Hermanoteu';
-
         // creating first atendee
-        let atendee1 = new Atendee();
-        atendee1.name = aName;
+        serviceHelper.createAtendee(service, EXAMPLE_NAME, '');
 
         // creating second atendee
         let atendee2 = new Atendee();
-        atendee2.name = aName; // The same name!
+        
+        atendee2.name = EXAMPLE_NAME; // The same name!
 
-        service.create(atendee1);
         const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
+        
         const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
 
         serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
