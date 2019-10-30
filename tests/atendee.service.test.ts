@@ -82,11 +82,9 @@ describe('AtendeeServiceTest', () => {
     });
 
     it('t05_createAtendeeWithInvalidEmail', () => {
-        const aName: string = 'Hermanoteu';
 
         let atendee = new Atendee();
-        atendee.name = aName;
-
+        atendee.name = EXAMPLE_NAME;
 
         const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
         const expectedExceptionMessage = "Atendee e-mail format is invalid";
