@@ -4,8 +4,8 @@ import { AtendeeService } from '../src/atendee/atendee.service';
 export class AtendeeServiceHelper{
 
     public validateAtendee(aName: string, anEmail: string, createdAtendee: Atendee): void {
-        expect(createdAtendee.id).not.toBeNull;
-        expect(createdAtendee.date).not.toBeNull;
+        expect(createdAtendee.id).not.toBeNull();
+        expect(createdAtendee.date).not.toBeNull();
         expect(createdAtendee.name).toEqual(aName);
         expect(createdAtendee.email).toEqual(anEmail);
     }

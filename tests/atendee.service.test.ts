@@ -37,15 +37,10 @@ describe('AtendeeServiceTest', () => {
     it('t02_createAtendeeWithoutName ', () => {
         let atendee = new Atendee();
 
-        try {
-            service.create(atendee);
-            fail('Accepted atendee without name');
-        } catch (ex) {
-            expect('Name is mandatory').toEqual(ex.message);
-        }
         const failMessage: string = 'Test failed because the system accepted to create atendee without name';
-        const expectedExceptionMessage: string = "Name is mandatory";
 
+        const expectedExceptionMessage: string = 'Name is mandatory';
+        
         serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
 
