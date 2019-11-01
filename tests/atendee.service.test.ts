@@ -177,4 +177,22 @@ describe('AtendeeServiceTest', () => {
         serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
     });
 
+    it('t11_updateAtendeeWithAutomaticFields', () => {
+
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+        let creationDate = createdAtendee.date;
+
+        // updating date
+        createdAtendee.date = new Date("01/11/2019");
+
+        createdAtendee.name = 'Meytal Cohen';
+        createdAtendee.email = 'm@gmail.com';
+        createdAtendee.ssn = '623-76-7120';
+
+        let updatedAtendee = service.update(createdAtendee);
+
+        expect(creationDate).toEqual(updatedAtendee.date);
+    });
+
+
 });
