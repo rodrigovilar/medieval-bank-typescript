@@ -133,4 +133,18 @@ describe('AtendeeServiceTest', () => {
         serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 
     });
+
+    it('t08_updateAtendeeWithUnknownId', () => {
+
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+
+        createdAtendee.id = -1;
+        createdAtendee.name = 'Meytal cohen';
+        createdAtendee.email = 'meytal.cohen@gmail.com';
+
+        const failMessage: string = 'Test failed because the system accepted to update atendee with unknown id';
+        const expectedExceptionMessage: string = 'Atendee with unknown id';
+
+        serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+    });
 });
