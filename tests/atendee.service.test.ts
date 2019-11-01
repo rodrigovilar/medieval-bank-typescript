@@ -229,4 +229,22 @@ describe('AtendeeServiceTest', () => {
         }
     });
 
+    it("t14_deleteAttendantThatDoesNotExist", () => {
+
+        let atendee = new Atendee();
+        atendee.id = 123;
+        atendee.name = EXAMPLE_NAME;
+        atendee.email = EXAMPLE_EMAIL;
+        atendee.ssn = EXAMPLE_SSN;
+
+        const expectedExceptionMessage = 'Atendee does not exist';
+        const failMessage = "Test failed because system 'deleted' an attendant that does not exist";
+        try {
+            service.delete(atendee);
+            fail(failMessage);
+        } catch (ex) {
+            expect(expectedExceptionMessage).toEqual(ex.message);
+        }
+    });
+
 });
