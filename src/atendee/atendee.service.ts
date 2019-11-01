@@ -18,4 +18,8 @@ export class AtendeeService {
 		throw new Error("Method not implemented.");
 	}
 
+	getAll(): Atendee[] {
+		throw new Error("Method not implemented.");
+	}
+
 }

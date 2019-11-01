@@ -243,4 +243,18 @@ describe('AtendeeServiceTest', () => {
         serviceHelper.tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
 
+    it("t15_getAllAtendee", () => {
+
+        let atendee1 = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+        let atendee2 = serviceHelper.createAtendee(service, 'Meytal Cohen', 'meytalcohen@gmail.com', '123-76-7120');
+        let atendee3 = serviceHelper.createAtendee(service, 'Bio Gates', 'bil.gates@hotmail.com', '623-76-2255');
+
+        let atendeeList: Atendee[] = service.getAll();
+
+        expect(atendeeList.length).toEqual(3);
+        expect(atendeeList[0]).toEqual(atendee1);
+        expect(atendeeList[1]).toEqual(atendee2);
+        expect(atendeeList[2]).toEqual(atendee3);
+    });
+
 });
