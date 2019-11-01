@@ -14,4 +14,8 @@ export class AtendeeService {
 		throw new Error("Method not implemented.");
 	}
 
+	delete(atendee: Atendee): Atendee {
+		throw new Error("Method not implemented.");
+	}
+
 }

@@ -212,5 +212,21 @@ describe('AtendeeServiceTest', () => {
 
     });
 
+    it('t13_deleteAtendee', () => {
+
+        let atendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+        let deleteAtendee: Atendee = service.delete(atendee);
+
+        expect(deleteAtendee).toEqual(atendee);
+
+        const expectedExceptionMessage = 'Atendee not found';
+        const failMessage = "The test failed because the system returned the attendant when it should not have found";
+        try {
+            service.getOne(atendee.id);
+            fail(failMessage);
+        } catch (ex) {
+            expect(expectedExceptionMessage).toEqual(ex.message);
+        }
+    });
 
 });
