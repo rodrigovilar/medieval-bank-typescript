@@ -162,4 +162,19 @@ describe('AtendeeServiceTest', () => {
 
         serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
     });
+
+    it('t10_updateAtendeeWithDuplicatedMandatoryFields', () => {
+
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+
+        createdAtendee.name = EXAMPLE_NAME;
+        createdAtendee.email = EXAMPLE_EMAIL;
+        createdAtendee.ssn = EXAMPLE_SSN;
+
+        const failMessage: string = 'Test failed because the system accepted to update atendee with duplicated mandatory fields';
+        const expectedExceptionMessage: string = 'Attendee name, email and ssn cannot be duplicated';
+
+        serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+    });
+
 });
