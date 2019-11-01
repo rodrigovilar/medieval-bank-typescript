@@ -1,7 +1,15 @@
 import { Atendee } from '../src/atendee/atendee';
 import { AtendeeService } from '../src/atendee/atendee.service';
 
-export class AtendeeServiceHelper{
+export class AtendeeServiceHelper {
+    public tryDeleteAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
+        try {
+            service.delete(atendee);
+            fail(failMessage);
+        } catch (ex) {
+            expect(expectedExceptionMessage).toEqual(ex.message);
+        }
+    }
 
     public validateAtendee(aName: string, anEmail: string, createdAtendee: Atendee): void {
         expect(createdAtendee.id).not.toBeNull();
@@ -30,7 +38,7 @@ export class AtendeeServiceHelper{
         }
     }
 
-    public createAtendee(service: AtendeeService,name: string, email: string, ssn: string): Atendee {
+    public createAtendee(service: AtendeeService, name: string, email: string, ssn: string): Atendee {
         let atendee = new Atendee();
         atendee.name = name;
         atendee.email = email;
