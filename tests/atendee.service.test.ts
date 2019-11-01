@@ -147,4 +147,19 @@ describe('AtendeeServiceTest', () => {
 
         serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
     });
+
+    it('t09_updateAtendeeWithNullMandatoryFields', () => {
+
+        let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+
+        createdAtendee.name = '';
+        createdAtendee.email = '';
+        createdAtendee.ssn = '';
+        createdAtendee.date = undefined;
+
+        const failMessage: string = 'Test failed because the system accepted to update atendee with null mandatory fields';
+        const expectedExceptionMessage: string = 'Mandatory fields not entered'; // or Required fields not entered
+
+        serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+    });
 });
