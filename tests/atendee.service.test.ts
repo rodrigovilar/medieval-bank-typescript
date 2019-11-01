@@ -194,5 +194,23 @@ describe('AtendeeServiceTest', () => {
         expect(creationDate).toEqual(updatedAtendee.date);
     });
 
+    it('t12_updateAtendeeWithInvalidEmail', () => {
+
+        let atendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+
+        const failMessage = "Test failed because the system accepted to update atendee with invalid e-mail format";
+        const expectedExceptionMessage = "Atendee e-mail format is invalid";
+
+        atendee.email = 'ssdd@.dd';
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+        atendee.email = 'sdsdfa#gmail.com';
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+        atendee.email = 'sdsdfa@gmail';
+        serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    });
+
 
 });
