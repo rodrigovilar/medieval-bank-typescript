@@ -1,7 +1,6 @@
 import { Atendee } from "./atendee";
 
 export class AtendeeService {
-
 	getOne(id: number): Atendee {
 		throw new Error("Method not implemented.");
 	}
@@ -21,5 +20,10 @@ export class AtendeeService {
 	getAll(): Atendee[] {
 		throw new Error("Method not implemented.");
 	}
+
+	filterByField(field: string, value: string): Atendee[] {
+		throw new Error("Method not implemented.");
+	}
+
 
 }
