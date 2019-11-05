@@ -1,5 +1,5 @@
 export class Atendee {
-  public id: number = 0;
+  public id?: number;
   public name: string = '';
   public date: Date | undefined;
   public email: string = '';

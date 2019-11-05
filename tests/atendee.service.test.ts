@@ -16,6 +16,8 @@ describe('AtendeeServiceTest', () => {
 
     const EXAMPLE_SSN: string = '623-76-7120';
 
+    const UNKNOWN = -1;
+
     // This function is called *before each test specification*, *it* function, has been run.
     beforeEach(() => {
         service = new AtendeeService();
@@ -136,14 +138,22 @@ describe('AtendeeServiceTest', () => {
 
     it('t08_updateAtendeeWithUnknownId', () => {
 
+        let atendeeUnknownId: Atendee = new Atendee();
+        atendeeUnknownId.id = UNKNOWN;
+
+        let failMessage: string = 'Test failed because the system accepted to update atendee with unknown id';
+        let expectedExceptionMessage: string = `Atendee id not found: ${UNKNOWN}`;
+
+        serviceHelper.tryUpdateAtendeeWithError(service, atendeeUnknownId, failMessage, expectedExceptionMessage);
+
         let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
-        createdAtendee.id = -1;
+        createdAtendee.id = UNKNOWN;
         createdAtendee.name = 'Meytal cohen';
         createdAtendee.email = 'meytal.cohen@gmail.com';
 
-        const failMessage: string = 'Test failed because the system accepted to update atendee with unknown id';
-        const expectedExceptionMessage: string = 'Atendee with unknown id';
+        failMessage = 'Test failed because the system accepted to update atendee with unknown id';
+        expectedExceptionMessage = `Atendee id not found: ${UNKNOWN}`;
 
         serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
     });
