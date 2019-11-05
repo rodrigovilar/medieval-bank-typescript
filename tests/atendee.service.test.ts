@@ -269,9 +269,9 @@ describe('AtendeeServiceTest', () => {
 
     it('t16_filterByField', () => {
 
-        serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-        serviceHelper.createAtendee(service, 'Meytal Gates', 'meytalgates@gmail.com', '123-83-7120');
-        serviceHelper.createAtendee(service, 'Bio Gates', 'bil.gates@hotmail.com', '623-83-2255');
+        let atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+        let atendeeMeytal = serviceHelper.createAtendee(service, 'Meytal Gates', 'meytalgates@gmail.com', '123-83-7120');
+        let atendeeBill = serviceHelper.createAtendee(service, 'Bill Gates', 'bill.gates@hotmail.com', '623-83-2255');
 
         let field: string = 'name';
         let equalTo: string = 'marrone';
@@ -284,11 +284,14 @@ describe('AtendeeServiceTest', () => {
         equalTo = 'gates';
         filteredList = service.filterByField(field, equalTo);
         expect(filteredList.length).toEqual(2);
+        expect(filteredList[0]).toEqual(atendeeMeytal);
+        expect(filteredList[1]).toEqual(atendeeBill);
 
         field = 'name';
         equalTo = 'b';
         filteredList = service.filterByField(field, equalTo);
         expect(filteredList.length).toEqual(1);
+        expect(filteredList[0]).toEqual(atendeeBill);
 
         field = 'name';
         equalTo = '4';
@@ -301,11 +304,16 @@ describe('AtendeeServiceTest', () => {
         equalTo = '83';
         filteredList = service.filterByField(field, equalTo);
         expect(filteredList.length).toEqual(2);
+        expect(filteredList[0]).toEqual(atendeeMeytal);
+        expect(filteredList[1]).toEqual(atendeeBill);
 
         field = 'ssn';
         equalTo = '3';
         filteredList = service.filterByField(field, equalTo);
         expect(filteredList.length).toEqual(3);
+        expect(filteredList[0]).toEqual(atendee);
+        expect(filteredList[1]).toEqual(atendeeMeytal);
+        expect(filteredList[2]).toEqual(atendeeBill);
 
         field = 'ssn';
         equalTo = '4';
@@ -318,11 +326,14 @@ describe('AtendeeServiceTest', () => {
         equalTo = 'gmail';
         filteredList = service.filterByField(field, equalTo);
         expect(filteredList.length).toEqual(2);
+        expect(filteredList[0]).toEqual(atendee);
+        expect(filteredList[1]).toEqual(atendeeMeytal);
 
         field = 'email';
         equalTo = 'hotmail';
         filteredList = service.filterByField(field, equalTo);
         expect(filteredList.length).toEqual(1);
+        expect(filteredList[0]).toEqual(atendeeBill);
 
         field = 'email';
         equalTo = 'outlook';
