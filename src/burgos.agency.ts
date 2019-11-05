@@ -1,18 +1,21 @@
 export class BurgosAgency {
 
-    static SetName(name: string) {
-//        throw new Error("Method not implemented.");
+    private static agencyName: string;
+    private static manager: string;
+
+    static getAgencyName(): string {
+        return BurgosAgency.agencyName;
     }
 
-    static GetName(): string {
-        return 'Burgosland';
+    static setAngencyName(name: string): void {
+        BurgosAgency.agencyName = name;
     }
 
-    static SetManager(manager: string) {
-//        throw new Error("Method not implemented.");
+    static getManager(): string{
+        return BurgosAgency.manager;
     }
 
-    static GetManager(): string {
-        return 'Joseph';
+    static setManager(name: string): void {
+        BurgosAgency.manager = name;
     }
 }
