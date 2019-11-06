@@ -1,4 +1,4 @@
-import { BurgosAgency } from './burgos-agency';
+import { BurgosAgency } from '../src/BurgosAgency/burgos-agency';
 
 describe('BurgosAgency', () => {
   it('should be defined', () => {
