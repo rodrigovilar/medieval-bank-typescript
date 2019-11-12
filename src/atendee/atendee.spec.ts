@@ -1,4 +1,4 @@
-import { Atendee } from '../src/Atendee/atendee';
+import { Atendee } from './atendee';
 
 describe('Atendee', () => {
   it('should be defined', () => {
