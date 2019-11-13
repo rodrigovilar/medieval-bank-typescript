@@ -1,8 +1,8 @@
-import { AtendeeServiceService } from './atendee-service.service';
+import { AtendeeService } from './atendee.service';
 import { Atendee } from '../atendee';
 
 export class AtendeeServiceHelper {
-    public tryDeleteAtendeeWithError(service: AtendeeServiceService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
+    public tryDeleteAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
         try {
             service.delete(atendee);
             fail(failMessage);
@@ -18,7 +18,7 @@ export class AtendeeServiceHelper {
         expect(createdAtendee.email).toEqual(anEmail);
     }
 
-    public tryCreateAtendeeWithError(service: AtendeeServiceService, atendee: Atendee, failMessage: string,
+    public tryCreateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
         expectedExceptionMessage: string): void {
         try {
             service.create(atendee);
@@ -28,7 +28,7 @@ export class AtendeeServiceHelper {
         }
     }
 
-    public tryUpdateAtendeeWithError(service: AtendeeServiceService, atendee: Atendee, failMessage: string,
+    public tryUpdateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
         expectedExceptionMessage: string): void {
         try {
             service.update(atendee);
@@ -38,7 +38,7 @@ export class AtendeeServiceHelper {
         }
     }
 
-    public createAtendee(service: AtendeeServiceService, name: string, email: string, ssn: string): Atendee {
+    public createAtendee(service: AtendeeService, name: string, email: string, ssn: string): Atendee {
         let atendee = new Atendee();
         atendee.name = name;
         atendee.email = email;

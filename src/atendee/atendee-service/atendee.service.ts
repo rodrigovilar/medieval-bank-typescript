@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Atendee } from '../atendee';
 
 @Injectable()
-export class AtendeeServiceService {
-    getOne(id: number): Atendee {
+export class AtendeeService {
+	getOne(id: number): Atendee {
 		throw new Error("Method not implemented.");
 	}
 
