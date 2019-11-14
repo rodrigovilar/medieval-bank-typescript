@@ -1,4 +1,4 @@
-import { Controller, Post, Put, Body } from '@nestjs/common';
+import { Controller, Post, Put, Body, Param, Delete } from '@nestjs/common';
 import { Atendee } from '../atendee.entity';
 import { AtendeeService } from './atendee.service';
 
@@ -7,8 +7,7 @@ import { AtendeeService } from './atendee.service';
 export class AtendeeController {
 
     // The service will take care of the logic
-    constructor(private antendeeService: AtendeeService) {
-    }
+    constructor(private antendeeService: AtendeeService) { }
 
     // end-point create
     // http://localhost:3000/atendee/create
@@ -17,8 +16,24 @@ export class AtendeeController {
         return await this.antendeeService.create(atendeeDate);
     }
 
-    // @Put(':id/update')
-    // async update()
+    // end-point, ex: http://localhost:3000/atendee/2/update
+    // Passando o id e o atendee
+    @Put(':id/update')
+    async update(
+        @Param('id') id: any,
+        @Body() atendeeData: Atendee): Promise<any> {
+        atendeeData.id = Number(id); // id é um dinâmico
+
+        console.log(`Update # ${atendeeData}`);
+        this.antendeeService.update(atendeeData);
+    }
+
+
+    // end-point,  ex: http://localhost:3000/atendee/2/delete
+    @Delete(':id/delete')
+    async delete(@Param('id') id): Promise<any> {
+        return this.antendeeService.delete(id);
+    }
 
 
 }
