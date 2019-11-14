@@ -1,9 +1,9 @@
-import { Controller, Post, Put, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Put, Body, Param, Delete, Get } from '@nestjs/common';
 import { Atendee } from '../atendee.entity';
 import { AtendeeService } from './atendee.service';
 
 // url http://localhost:3000/atendee
-@Controller('atendee')
+@Controller('atendees')
 export class AtendeeController {
 
     // The service will take care of the logic
@@ -35,5 +35,10 @@ export class AtendeeController {
         return this.antendeeService.delete(id);
     }
 
-
+    // Todas as requisões CRUD
+    // http://localhost:3000/atendees
+    @Get()
+    index(): Promise<Atendee[]> {
+        return this.antendeeService.findAll();
+    }
 }
