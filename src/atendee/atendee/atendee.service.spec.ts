@@ -28,14 +28,10 @@ describe('AtendeeService', () => {
 
         // database
         TypeOrmModule.forRoot({
-          type: 'postgres',
-          host: '192.168.99.100',
-          port: 5432,
-          username: 'postgres',
-          password: '1234',
-          database: 'teste',
-          entities: [Atendee],
-          synchronize: true,
+          type: 'sqlite',
+          database: 'burguesDB',
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: true
         })]
     }).compile();
     service = module.get(AtendeeService);
@@ -66,7 +62,7 @@ describe('AtendeeService', () => {
       })
       .catch( error => fail(error));
   });
-/*
+
   it('t02_createAtendeeWithoutName ', () => {
     let atendee: Atendee;
 
@@ -75,8 +71,9 @@ describe('AtendeeService', () => {
     const expectedExceptionMessage: string = 'Name is mandatory';
 
     serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+    
   });
-
+/*
   it('t03_atendeeNameDuplicated', () => {
 
     // creating first atendee
