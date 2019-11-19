@@ -30,7 +30,7 @@ describe('AtendeeService', () => {
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: 'burguesDB',
-          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          entities: [Atendee],
           synchronize: true
         })]
     }).compile();
@@ -44,36 +44,29 @@ describe('AtendeeService', () => {
 
   it('t01_createAtendee', () => {
 
-    // create object
-    let atendee: Atendee = new Atendee();
-
-    atendee.setName(EXAMPLE_NAME);
-    atendee.email = EXAMPLE_EMAIL;
-    atendee.ssn = EXAMPLE_SSN;
-
-    service.create(atendee)
-      .then( createdAtendee => {
-        serviceHelper.validateAtendee(EXAMPLE_NAME, EXAMPLE_EMAIL, createdAtendee);
-
+    serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, null,
+      createdAtendee => {
         service.getOne(createdAtendee.id)
           .then( searchedAtendee => expect(createdAtendee).toEqual(searchedAtendee) )
           .catch( error => fail(error) );
-    
-      })
-      .catch( error => fail(error));
+      });
   });
-
+/*
   it('t02_createAtendeeWithoutName ', () => {
-    let atendee: Atendee;
+    let atendee: Atendee = new Atendee();
+
+    atendee.name = '';
+    atendee.email = EXAMPLE_EMAIL;
+    atendee.ssn = EXAMPLE_SSN;
+
 
     const failMessage: string = 'Test failed because the system accepted to create atendee without name';
 
     const expectedExceptionMessage: string = 'Name is mandatory';
 
     serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-    
+
   });
-/*
   it('t03_atendeeNameDuplicated', () => {
 
     // creating first atendee
