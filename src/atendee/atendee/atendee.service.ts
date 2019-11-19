@@ -13,7 +13,7 @@ export class AtendeeService {
     constructor(
         // The atendeeRepository will take care of CRUD 
         @InjectRepository(Atendee)
-        private readonly atendeeRepository: AtendeeRepository
+        private readonly atendeeRepository: Repository<Atendee>
     ) { }
 
     // CREATE

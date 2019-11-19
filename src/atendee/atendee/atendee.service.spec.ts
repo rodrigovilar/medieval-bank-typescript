@@ -1,15 +1,16 @@
-import { AtendeeRepository } from './atendee.repository';
 import { AtendeeService } from './atendee.service';
 import { AtendeeServiceHelper } from './atendee.service.helper';
 import { INestApplication } from '@nestjs/common';
 import { Atendee } from '../atendee.entity';
 
+import { Test } from '@nestjs/testing';
+import { AtendeeModule } from '../atendee.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 describe('AtendeeService', () => {
   let service: AtendeeService;
 
   let serviceHelper: AtendeeServiceHelper;
-
-  let atendedRepository: AtendeeRepository;
 
   const EXAMPLE_NAME: string = 'A Name';
 
@@ -21,8 +22,23 @@ describe('AtendeeService', () => {
 
   let app: INestApplication;
 
-  beforeEach(async () => {
-    service = new AtendeeService(atendedRepository);
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      imports: [AtendeeModule,
+
+        // database
+        TypeOrmModule.forRoot({
+          type: 'postgres',
+          host: '192.168.99.100',
+          port: 5432,
+          username: 'postgres',
+          password: '1234',
+          database: 'teste',
+          entities: [Atendee],
+          synchronize: true,
+        })]
+    }).compile();
+    service = module.get(AtendeeService);
     serviceHelper = new AtendeeServiceHelper();
   });
 
@@ -33,20 +49,22 @@ describe('AtendeeService', () => {
   it('t01_createAtendee', () => {
 
     // create object
-    let createdAtendee: Atendee = new Atendee();
+    let atendee: Atendee = new Atendee();
 
-    createdAtendee.setName(EXAMPLE_NAME);
-    createdAtendee.date = new Date();
-    createdAtendee.email = EXAMPLE_EMAIL;
-    createdAtendee.ssn = EXAMPLE_SSN;
+    atendee.setName(EXAMPLE_NAME);
+    atendee.email = EXAMPLE_EMAIL;
+    atendee.ssn = EXAMPLE_SSN;
 
-    let atendee: Promise<Atendee> = service.create(createdAtendee);
+    service.create(atendee)
+      .then( createdAtendee => {
+        serviceHelper.validateAtendee(EXAMPLE_NAME, EXAMPLE_EMAIL, createdAtendee);
 
-    serviceHelper.validateAtendee(EXAMPLE_NAME, EXAMPLE_EMAIL, createdAtendee);
-
-    let searchedAtendee: Promise<Atendee> = service.getOne(createdAtendee.id);
-    expect(atendee).toEqual(searchedAtendee);
-
+        service.getOne(createdAtendee.id)
+          .then( searchedAtendee => expect(createdAtendee).toEqual(searchedAtendee) )
+          .catch( error => fail(error) );
+    
+      })
+      .catch( error => fail(error));
   });
 /*
   it('t02_createAtendeeWithoutName ', () => {
