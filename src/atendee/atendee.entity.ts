@@ -4,6 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 @Entity()
 export class Atendee {
 
+
     // primary key
     @PrimaryGeneratedColumn()
     id: number;
@@ -12,11 +13,19 @@ export class Atendee {
     name: string;
 
     @Column()
-    date: Date | undefined;
+    date: Date;
 
     @Column()
     email: string;
 
     @Column()
     ssn: string;
+
+    getCreation(getCreation: any) {
+        throw new Error("Method not implemented.");
+    }
+
+    setName(name: string) {
+        this.name = name;
+    }
 }

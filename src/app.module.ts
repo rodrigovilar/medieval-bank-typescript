@@ -1,3 +1,4 @@
+import { Atendee } from './atendee/atendee.entity';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,12 +12,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
     // database
     TypeOrmModule.forRoot({
-      type: 'sqlite', // type SGBD
-      database: 'burgesDB', // name database
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      type: 'postgres',
+      host: '192.168.99.100',
+      port: 5432,
+      username: 'postgres',
+      password: '1234',
+      database: 'test',
+      entities: [Atendee],
       synchronize: true,
     })],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule { }
