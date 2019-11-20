@@ -51,22 +51,25 @@ describe('AtendeeService', () => {
     expect(createdAtendee).toEqual(searchedAtendee);
     expect('Cuscuz').toEqual('Cuscuz');
   });
+
+  it('t02_createAtendeeWithoutName ', async () => {
+
+    let atendee: Atendee = new Atendee();
+
+    atendee.name = null;
+    atendee.email = EXAMPLE_EMAIL;
+    atendee.ssn = EXAMPLE_SSN;
+
+
+    const failMessage: string = 'Test failed because the system accepted to create atendee without name';
+
+    const expectedExceptionMessage: string = 'Name is mandatory';
+
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+  });
+
   /*
-    it('t02_createAtendeeWithoutName ', () => {
-      let atendee: Atendee = new Atendee();
-  
-      atendee.name = '';
-      atendee.email = EXAMPLE_EMAIL;
-      atendee.ssn = EXAMPLE_SSN;
-  
-  
-      const failMessage: string = 'Test failed because the system accepted to create atendee without name';
-  
-      const expectedExceptionMessage: string = 'Name is mandatory';
-  
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-  
-    });
     it('t03_atendeeNameDuplicated', () => {
   
       // creating first atendee
