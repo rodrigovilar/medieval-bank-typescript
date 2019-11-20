@@ -150,36 +150,20 @@ describe('AtendeeService', () => {
 
   });
 
-  /*
-let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, '');
+  it('t07_updateAtendeeWithImmutableFields', async () => {
 
- 
-
-
- 
-
-serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
-
-expect(createdAtendee.id).not.toBeNull();
-expect(createdAtendee.getCreation).not.toBeNull();
-
-
-*/
-  /*
-
-  it('t07_updateAtendeeWithImmutableFields', () => {
-
-    let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.ssn = '670-03-8924';
 
     const failMessage: string = 'Test failed because the system accepted to update atendee with a new SSN';
     const expectedExceptionMessage: string = 'Atendee SSN is immutable';
 
-    serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+    await serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
 
   });
 
+  /*
   it('t08_updateAtendeeWithUnknownId', () => {
 
     let atendeeUnknownId: Atendee = new Atendee();

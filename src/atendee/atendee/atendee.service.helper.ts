@@ -30,10 +30,10 @@ export class AtendeeServiceHelper {
         }
     }
 
-    public tryUpdateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
-        expectedExceptionMessage: string): void {
+    public async tryUpdateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
+        expectedExceptionMessage: string): Promise<void> {
         try {
-            service.update(atendee);
+            await service.update(atendee);
             fail(failMessage);
         } catch (ex) {
             expect(expectedExceptionMessage).toEqual(ex.message);

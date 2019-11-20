@@ -36,6 +36,11 @@ export class AtendeeService {
 
     // UPDATE
     async update(atendee: Atendee): Promise<Atendee> {
+
+        let searchedAtendee: Atendee = await this.atendeeRepository.findOne({ id: atendee.id })
+        if (atendee.ssn != searchedAtendee.ssn)
+            throw new Error('Atendee SSN is immutable');
+
         this.atendeeRepository.update(atendee.id, atendee);
         return await this.getOne(atendee.id);
     }
