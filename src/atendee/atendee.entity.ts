@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 // Entity decorator
 @Entity()
@@ -8,7 +9,8 @@ export class Atendee {
     // primary key
     @PrimaryGeneratedColumn()
     id: number;
-
+    
+    @IsNotEmpty()
     @Column()
     name: string;
 
@@ -20,12 +22,4 @@ export class Atendee {
 
     @Column()
     ssn: string;
-
-    getCreation(getCreation: any) {
-        throw new Error("Method not implemented.");
-    }
-
-    setName(name: string) {
-        this.name = name;
-    }
 }

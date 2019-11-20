@@ -1,5 +1,4 @@
-import { AtendeeRepository } from './atendee.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Atendee } from '../atendee.entity';
 import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,6 +17,7 @@ export class AtendeeService {
 
     // CREATE
     async create(atendee: Atendee): Promise<Atendee> {
+        this.validateAtendeeWthoutName(atendee);
         return await this.atendeeRepository.save(atendee);
     }
 
@@ -41,5 +41,10 @@ export class AtendeeService {
     // DELETE
     async delete(id): Promise<DeleteResult> {
         return await this.atendeeRepository.delete(id);
+    }
+
+    private validateAtendeeWthoutName(createdAtendee: Atendee): void {
+        if(createdAtendee.name == null)
+            throw new UnauthorizedException("Name is mandatory")
     }
 }

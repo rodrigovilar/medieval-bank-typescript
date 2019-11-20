@@ -51,14 +51,15 @@ describe('AtendeeService', () => {
           .catch( error => fail(error) );
       });
   });
-/*
-  it('t02_createAtendeeWithoutName ', () => {
-    let atendee: Atendee = new Atendee();
 
-    atendee.name = '';
+  it('t02_createAtendeeWithoutName ', () => {
+
+    let atendee: Atendee =  new Atendee();
+
+    atendee.name = null;
     atendee.email = EXAMPLE_EMAIL;
     atendee.ssn = EXAMPLE_SSN;
-
+    service.create(atendee);
 
     const failMessage: string = 'Test failed because the system accepted to create atendee without name';
 
@@ -67,7 +68,7 @@ describe('AtendeeService', () => {
     serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
   });
-  it('t03_atendeeNameDuplicated', () => {
+ /* it('t03_atendeeNameDuplicated', () => {
 
     // creating first atendee
     serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);

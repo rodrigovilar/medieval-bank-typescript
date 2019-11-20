@@ -19,14 +19,16 @@ export class AtendeeServiceHelper {
         expect(createdAtendee.email).toEqual(anEmail);
     }
 
+
     public tryCreateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
         expectedExceptionMessage: string): void {
-        try {
-            service.create(atendee);
-            fail(failMessage);
-        } catch (ex) {
-            expect(expectedExceptionMessage).toEqual(ex.message);
-        }
+
+        service.create(atendee)
+            .then(createdAtendee => {
+                this.validateAtendeeWthoutName(createdAtendee);
+                fail(failMessage)
+            })
+            .catch(error => expect(expectedExceptionMessage).toEqual(error.message.message));
     }
 
     public tryUpdateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
@@ -55,6 +57,10 @@ export class AtendeeServiceHelper {
             })
             .catch(error => fail(error));
         return atendee;
+    }
+
+    public validateAtendeeWthoutName(createdAtendee: Atendee): void {
+        expect(createdAtendee.name).not.toBeNull();
     }
 
 }
