@@ -39,22 +39,15 @@ export class AtendeeServiceHelper {
         }
     }
 
-    public createAtendee(service: AtendeeService, name: string, email: string, ssn: string, callback): Atendee {
+    public async createAtendee(service: AtendeeService, name: string, email: string, ssn: string): Promise<Atendee> {
         let atendee = new Atendee();
         atendee.name = name;
         atendee.email = email;
         atendee.ssn = ssn;
 
-        service.create(atendee)
-            .then(createdAtendee => {
-
-                this.validateAtendee(name, email, createdAtendee)
-
-                if (callback)
-                    callback(createdAtendee);
-            })
-            .catch(error => fail(error));
-        return atendee;
+        let createdAtendee = await service.create(atendee)
+        this.validateAtendee(name, email, createdAtendee)
+        return createdAtendee;
     }
 
 }

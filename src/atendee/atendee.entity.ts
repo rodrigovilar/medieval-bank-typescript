@@ -12,20 +12,12 @@ export class Atendee {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ nullable: false })
     date: Date;
 
     @Column()
     email: string;
 
-    @Column()
+    @Column({ nullable: true })
     ssn: string;
-
-    getCreation(getCreation: any) {
-        throw new Error("Method not implemented.");
-    }
-
-    setName(name: string) {
-        this.name = name;
-    }
 }

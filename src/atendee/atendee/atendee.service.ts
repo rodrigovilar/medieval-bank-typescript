@@ -18,6 +18,7 @@ export class AtendeeService {
 
     // CREATE
     async create(atendee: Atendee): Promise<Atendee> {
+        atendee.date = new Date();
         return await this.atendeeRepository.save(atendee);
     }
 

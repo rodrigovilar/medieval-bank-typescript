@@ -6,6 +6,7 @@ import { Atendee } from '../atendee.entity';
 import { Test } from '@nestjs/testing';
 import { AtendeeModule } from '../atendee.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { async } from 'rxjs/internal/scheduler/async';
 
 describe('AtendeeService', () => {
   let service: AtendeeService;
@@ -29,7 +30,7 @@ describe('AtendeeService', () => {
         // database
         TypeOrmModule.forRoot({
           type: 'sqlite',
-          database: 'burguesDB',
+          database: 'burgosDB',
           entities: [Atendee],
           synchronize: true
         })]
@@ -42,108 +43,136 @@ describe('AtendeeService', () => {
     expect(service).toBeDefined();
   });
 
-  it('t01_createAtendee', () => {
 
-    serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, null,
-      createdAtendee => {
-        service.getOne(createdAtendee.id)
-          .then( searchedAtendee => expect(createdAtendee).toEqual(searchedAtendee) )
-          .catch( error => fail(error) );
-      });
+  it('t01_createAtendee', async () => {
+    let createdAtendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, null);
+    let searchedAtendee = await service.getOne(createdAtendee.id)
+
+    expect(createdAtendee).toEqual(searchedAtendee);
+    expect('Cuscuz').toEqual('Cuscuz');
   });
-/*
-  it('t02_createAtendeeWithoutName ', () => {
-    let atendee: Atendee = new Atendee();
+  /*
+    it('t02_createAtendeeWithoutName ', () => {
+      let atendee: Atendee = new Atendee();
+  
+      atendee.name = '';
+      atendee.email = EXAMPLE_EMAIL;
+      atendee.ssn = EXAMPLE_SSN;
+  
+  
+      const failMessage: string = 'Test failed because the system accepted to create atendee without name';
+  
+      const expectedExceptionMessage: string = 'Name is mandatory';
+  
+      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  
+    });
+    it('t03_atendeeNameDuplicated', () => {
+  
+      // creating first atendee
+      serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+  
+      // creating second atendee
+      let atendee2 = new Atendee();
+  
+      atendee2.name = EXAMPLE_NAME; // The same name!
+      atendee2.email = EXAMPLE_EMAIL;
+      atendee2.ssn = EXAMPLE_SSN;
+  
+      const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
+  
+      const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
+  
+      serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+    });
+    it('t04_createAtendeeWithAutomaticFields', () => {
+  
+  
+      // creating first atendee
+      let atendee = new Atendee();
+      atendee.name = EXAMPLE_NAME;
+      atendee.id = 123;
+  
+      let failMessage = "Test failed because the system accepted to create atendee with id already set";
+      let expectedExceptionMessage = "Atendee id cannot be set";
+  
+      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  
+      let atendee2 = new Atendee();
+      atendee2.name = EXAMPLE_NAME;
+      atendee2.setCreation(new Date());
+  
+      serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+    });
+  
+    it('t05_createAtendeeWithInvalidEmail', () => {
+  
+      let atendee = new Atendee();
+      atendee.name = EXAMPLE_NAME;
+  
+      const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
+      const expectedExceptionMessage = "Atendee e-mail format is invalid";
+  
+      atendee.email = 'ssdd@.dd';
+      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  
+      atendee.email = 'sdsdfa#gmail.com';
+      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  
+      atendee.email = 'sdsdfa@gmail';
+      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+    });
+  */
+  /*
+   it('t06_updateAtendee', async () => {
+ 
+ 
+     serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, null,
+       createdAtendee => {
+         service.getOne(createdAtendee.id)
+           .then((searchedAtendee) => {
+             // salvo com sucesso
+             expect(createdAtendee).toEqual(searchedAtendee);
+             expect('Sanduba').toEqual('Vaquinha');
+ 
+             // atualizando campos
+             const otherName: string = 'Other Name';
+             const otherEmail: string = 'other@email.com';
+ 
+ 
+             createdAtendee.name = otherName;
+             createdAtendee.email = otherEmail;
+ 
+             service.update(createdAtendee).then((updatedAtendee) => {
+               // validade atendee
+               expect(updatedAtendee.id).not.toBeNull();
+               expect(updatedAtendee.date).not.toBeNull();
+               expect(updatedAtendee.name).toEqual(otherName);
+               expect(updatedAtendee.email).toEqual(otherEmail); 
+             });
+ 
+ 
+           })
+           .catch(error => fail(error));
+       });*/
 
-    atendee.name = '';
-    atendee.email = EXAMPLE_EMAIL;
-    atendee.ssn = EXAMPLE_SSN;
+  /*
+let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, '');
+
+ 
 
 
-    const failMessage: string = 'Test failed because the system accepted to create atendee without name';
+ 
 
-    const expectedExceptionMessage: string = 'Name is mandatory';
+serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
 
-    serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+expect(createdAtendee.id).not.toBeNull();
+expect(createdAtendee.getCreation).not.toBeNull();
 
-  });
-  it('t03_atendeeNameDuplicated', () => {
-
-    // creating first atendee
-    serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-
-    // creating second atendee
-    let atendee2 = new Atendee();
-
-    atendee2.name = EXAMPLE_NAME; // The same name!
-    atendee2.email = EXAMPLE_EMAIL;
-    atendee2.ssn = EXAMPLE_SSN;
-
-    const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
-
-    const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
-
-    serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
-  });
-  it('t04_createAtendeeWithAutomaticFields', () => {
-
-
-    // creating first atendee
-    let atendee = new Atendee();
-    atendee.name = EXAMPLE_NAME;
-    atendee.id = 123;
-
-    let failMessage = "Test failed because the system accepted to create atendee with id already set";
-    let expectedExceptionMessage = "Atendee id cannot be set";
-
-    serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-
-    let atendee2 = new Atendee();
-    atendee2.name = EXAMPLE_NAME;
-    atendee2.setCreation(new Date());
-
-    serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
-  });
-
-  it('t05_createAtendeeWithInvalidEmail', () => {
-
-    let atendee = new Atendee();
-    atendee.name = EXAMPLE_NAME;
-
-    const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
-    const expectedExceptionMessage = "Atendee e-mail format is invalid";
-
-    atendee.email = 'ssdd@.dd';
-    serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-
-    atendee.email = 'sdsdfa#gmail.com';
-    serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-
-    atendee.email = 'sdsdfa@gmail';
-    serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-  });
-
-  it('t06_updateAtendee', () => {
-
-    let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, '');
-
-    const otherName: string = 'Other Name';
-    const otherEmail: string = 'other@email.com';
-
-    createdAtendee.name = otherName;
-    createdAtendee.email = otherEmail;
-
-    let updatedAtendee: Atendee = service.update(createdAtendee);
-
-    serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
-
-    expect(createdAtendee.id).not.toBeNull();
-    expect(createdAtendee.getCreation).not.toBeNull();
-
-    let searchedAtendee: Atendee = service.getOne(updatedAtendee.id);
-    expect(updatedAtendee).toEqual(searchedAtendee);
-
-  });
+let searchedAtendee: Atendee = service.getOne(updatedAtendee.id);
+expect(updatedAtendee).toEqual(searchedAtendee);
+*/
+  /*
 
   it('t07_updateAtendeeWithImmutableFields', () => {
 
