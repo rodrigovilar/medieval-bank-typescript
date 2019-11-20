@@ -1,8 +1,8 @@
-import { AtendeeRepository } from './atendee.repository';
+import { Atendee } from './../atendee.entity';
 import { Injectable } from '@nestjs/common';
-import { Atendee } from '../atendee.entity';
-import { Repository, UpdateResult, DeleteResult } from 'typeorm';
+import { Repository, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NotNullException } from '../../Exceptions/not-null-exception';
 
 /**
  * This class will be responsible for the logic of CRUD.
@@ -18,6 +18,7 @@ export class AtendeeService {
 
     // CREATE
     async create(atendee: Atendee): Promise<Atendee> {
+        this.validateWithoutName(atendee);
         atendee.date = new Date();
         return await this.atendeeRepository.save(atendee);
     }
@@ -42,5 +43,10 @@ export class AtendeeService {
     // DELETE
     async delete(id): Promise<DeleteResult> {
         return await this.atendeeRepository.delete(id);
+    }
+
+    private validateWithoutName(atendee: Atendee): void {
+        if (atendee.name == null)
+            throw new NotNullException('Name is mandatory');
     }
 }

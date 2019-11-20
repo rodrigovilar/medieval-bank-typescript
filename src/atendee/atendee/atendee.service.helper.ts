@@ -19,13 +19,14 @@ export class AtendeeServiceHelper {
         expect(atendee.email).toEqual(anEmail);
     }
 
-    public tryCreateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
-        expectedExceptionMessage: string): void {
+    public async tryCreateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,
+        expectedExceptionMessage: string): Promise<void> {
+
         try {
-            service.create(atendee);
+            let createdAtendee = await this.createAtendee(service, atendee.name, atendee.email, atendee.ssn);
             fail(failMessage);
-        } catch (ex) {
-            expect(expectedExceptionMessage).toEqual(ex.message);
+        } catch (error) {
+            expect(expectedExceptionMessage).toEqual(error.message);
         }
     }
 
