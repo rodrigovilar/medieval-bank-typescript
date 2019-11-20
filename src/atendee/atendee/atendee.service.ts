@@ -1,5 +1,5 @@
 import { Atendee } from './../atendee.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotNullException } from '../../Exceptions/not-null-exception';
@@ -37,7 +37,13 @@ export class AtendeeService {
     // UPDATE
     async update(atendee: Atendee): Promise<Atendee> {
 
-        let searchedAtendee: Atendee = await this.atendeeRepository.findOne({ id: atendee.id })
+        let searchedAtendee: Atendee;
+        try {
+            searchedAtendee = await this.atendeeRepository.findOneOrFail({ id: atendee.id });
+        } catch (error) {
+            throw new Error(`Atendee id not found: ${atendee.id}`)
+        }
+
         if (atendee.ssn != searchedAtendee.ssn)
             throw new Error('Atendee SSN is immutable');
 
