@@ -4,6 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 @Entity()
 export class Atendee {
 
+
     // primary key
     @PrimaryGeneratedColumn()
     id: number;
@@ -11,12 +12,12 @@ export class Atendee {
     @Column()
     name: string;
 
-    @Column()
-    date: Date | undefined;
+    @Column({ nullable: false })
+    date: Date;
 
     @Column()
     email: string;
 
-    @Column()
+    @Column({ nullable: true })
     ssn: string;
 }

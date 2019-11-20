@@ -13,6 +13,7 @@ export class AtendeeController {
     // http://localhost:3000/atendee/create
     @Post('create')
     async create(@Body() atendeeDate: Atendee): Promise<any> {
+        atendeeDate.date = new Date();
         return await this.antendeeService.create(atendeeDate);
     }
 

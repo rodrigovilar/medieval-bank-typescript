@@ -1,3 +1,4 @@
+import { AtendeeRepository } from './atendee.repository';
 import { Injectable } from '@nestjs/common';
 import { Atendee } from '../atendee.entity';
 import { Repository, UpdateResult, DeleteResult } from 'typeorm';
@@ -12,12 +13,12 @@ export class AtendeeService {
     constructor(
         // The atendeeRepository will take care of CRUD 
         @InjectRepository(Atendee)
-        private atendeeRepository: Repository<Atendee>
+        private readonly atendeeRepository: Repository<Atendee>
     ) { }
 
-
     // CREATE
-    async create(atendee: Atendee): Promise<any> {
+    async create(atendee: Atendee): Promise<Atendee> {
+        atendee.date = new Date();
         return await this.atendeeRepository.save(atendee);
     }
 
@@ -26,11 +27,16 @@ export class AtendeeService {
         return await this.atendeeRepository.find();
     }
 
+    // READ BY ID
+    async getOne(id: number): Promise<Atendee> {
+        return await this.atendeeRepository.findOne(id);
+    }
+
 
     // UPDATE
-    async update(atendee: Atendee): Promise<UpdateResult> {
-
-        return await this.atendeeRepository.update(atendee.id, atendee);
+    async update(atendee: Atendee): Promise<Atendee> {
+        this.atendeeRepository.update(atendee.id, atendee);
+        return await this.getOne(atendee.id);
     }
 
     // DELETE

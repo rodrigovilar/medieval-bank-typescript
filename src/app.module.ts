@@ -1,3 +1,4 @@
+import { Atendee } from './atendee/atendee.entity';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,12 +12,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
     // database
     TypeOrmModule.forRoot({
-      type: 'sqlite', // type SGBD
-      database: 'burgesDB', // name database
+      type: 'sqlite',
+      database: 'burgosDB',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     })],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule { }
