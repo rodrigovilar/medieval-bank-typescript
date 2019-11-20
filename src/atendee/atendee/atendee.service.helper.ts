@@ -1,5 +1,6 @@
-import { Atendee } from '../src/atendee/atendee';
-import { AtendeeService } from '../src/atendee/atendee.service';
+import { AtendeeService } from './atendee.service';
+import { Atendee } from '../atendee.entity';
+
 
 export class AtendeeServiceHelper {
     public tryDeleteAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
@@ -38,14 +39,15 @@ export class AtendeeServiceHelper {
         }
     }
 
-    public createAtendee(service: AtendeeService, name: string, email: string, ssn: string): Atendee {
+    public async createAtendee(service: AtendeeService, name: string, email: string, ssn: string): Promise<Atendee> {
         let atendee = new Atendee();
         atendee.name = name;
         atendee.email = email;
         atendee.ssn = ssn;
-        service.create(atendee);
 
-        return service.create(atendee);
+        let createdAtendee = await service.create(atendee)
+        this.validateAtendee(name, email, createdAtendee)
+        return createdAtendee;
     }
 
 }
