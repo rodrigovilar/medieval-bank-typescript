@@ -12,11 +12,11 @@ export class AtendeeServiceHelper {
         }
     }
 
-    public validateAtendee(aName: string, anEmail: string, createdAtendee: Atendee): void {
-        expect(createdAtendee.id).not.toBeNull();
-        expect(createdAtendee.date).not.toBeNull();
-        expect(createdAtendee.name).toEqual(aName);
-        expect(createdAtendee.email).toEqual(anEmail);
+    public validateAtendee(aName: string, anEmail: string, atendee: Atendee): void {
+        expect(atendee.id).not.toBeNull();
+        expect(atendee.date).not.toBeNull();
+        expect(atendee.name).toEqual(aName);
+        expect(atendee.email).toEqual(anEmail);
     }
 
     public tryCreateAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string,

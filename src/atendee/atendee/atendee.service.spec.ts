@@ -123,38 +123,29 @@ describe('AtendeeService', () => {
       serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
   */
-  /*
-   it('t06_updateAtendee', async () => {
- 
- 
-     serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, null,
-       createdAtendee => {
-         service.getOne(createdAtendee.id)
-           .then((searchedAtendee) => {
-             // salvo com sucesso
-             expect(createdAtendee).toEqual(searchedAtendee);
-             expect('Sanduba').toEqual('Vaquinha');
- 
-             // atualizando campos
-             const otherName: string = 'Other Name';
-             const otherEmail: string = 'other@email.com';
- 
- 
-             createdAtendee.name = otherName;
-             createdAtendee.email = otherEmail;
- 
-             service.update(createdAtendee).then((updatedAtendee) => {
-               // validade atendee
-               expect(updatedAtendee.id).not.toBeNull();
-               expect(updatedAtendee.date).not.toBeNull();
-               expect(updatedAtendee.name).toEqual(otherName);
-               expect(updatedAtendee.email).toEqual(otherEmail); 
-             });
- 
- 
-           })
-           .catch(error => fail(error));
-       });*/
+
+  it('t06_updateAtendee', async () => {
+
+    let createdAtendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+
+    // updating fields
+    const otherName: string = 'Other Name';
+    const otherEmail: string = 'other@email.com';
+
+    createdAtendee.name = otherName;
+    createdAtendee.email = otherEmail;
+
+    let updatedAtendee = await service.update(createdAtendee);
+
+    serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
+
+    expect(updatedAtendee.date).toEqual(createdAtendee.date);
+
+    // check in database
+    let searchedAtendee: Atendee = await service.getOne(updatedAtendee.id);
+    expect(updatedAtendee).toEqual(searchedAtendee);
+
+  });
 
   /*
 let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, '');
@@ -169,8 +160,7 @@ serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
 expect(createdAtendee.id).not.toBeNull();
 expect(createdAtendee.getCreation).not.toBeNull();
 
-let searchedAtendee: Atendee = service.getOne(updatedAtendee.id);
-expect(updatedAtendee).toEqual(searchedAtendee);
+
 */
   /*
 
