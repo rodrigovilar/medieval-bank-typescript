@@ -37,6 +37,9 @@ export class AtendeeService {
     // UPDATE
     async update(atendee: Atendee): Promise<Atendee> {
 
+        if (atendee.name == undefined || atendee.name == null || atendee.name == '')
+            throw new Error('Name is mandatory');
+
         let searchedAtendee: Atendee;
         try {
             searchedAtendee = await this.atendeeRepository.findOneOrFail({ id: atendee.id });
