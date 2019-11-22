@@ -50,6 +50,10 @@ export class AtendeeService {
         if (atendee.ssn != searchedAtendee.ssn)
             throw new Error('Atendee SSN is immutable');
 
+        if (await this.haveDuplicateName(searchedAtendee, atendee)) {
+            throw new Error('Atendee name cannot be duplicated')
+        }
+
         this.atendeeRepository.update(atendee.id, atendee);
         return await this.getOne(atendee.id);
     }
@@ -63,4 +67,18 @@ export class AtendeeService {
         if (atendee.name == null)
             throw new NotNullException('Name is mandatory');
     }
+
+    private async haveDuplicateName(searchedAtendee: Atendee, atendee: Atendee): Promise<boolean> {
+        try {
+            searchedAtendee = await this.atendeeRepository.findOneOrFail({ name: atendee.name });
+            if (searchedAtendee.id !== atendee.id) {
+
+                return true;
+            }
+        }
+        catch (e) { }
+
+        return false;
+    }
+
 }

@@ -39,6 +39,11 @@ describe('AtendeeService', () => {
     serviceHelper = new AtendeeServiceHelper();
   });
 
+  // delete all atendees
+  afterEach(async () => {
+    serviceHelper.deleteAll(service)
+  });
+
   it('should be defined', async () => {
     expect(service).toBeDefined();
   });
@@ -132,15 +137,13 @@ describe('AtendeeService', () => {
     let createdAtendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     // updating fields
-    const otherName: string = 'Other Name';
     const otherEmail: string = 'other@email.com';
 
-    createdAtendee.name = otherName;
     createdAtendee.email = otherEmail;
 
     let updatedAtendee = await service.update(createdAtendee);
 
-    serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
+    serviceHelper.validateAtendee(EXAMPLE_NAME, otherEmail, updatedAtendee);
 
     expect(updatedAtendee.date).toEqual(createdAtendee.date);
 
@@ -209,21 +212,21 @@ describe('AtendeeService', () => {
 
   });
 
-  /*
- 
-  it('t10_updateAtendeeWithDuplicatedMandatoryFields', () => {
- 
-    let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
- 
+  it('t10_updateAtendeeWithDuplicatedName', async () => {
+
+    await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, 'Meytal cohen', EXAMPLE_EMAIL, EXAMPLE_SSN);
+
     createdAtendee.name = EXAMPLE_NAME;
-    createdAtendee.email = EXAMPLE_EMAIL;
-    createdAtendee.ssn = EXAMPLE_SSN;
- 
+
     const failMessage: string = 'Test failed because the system accepted to update atendee with duplicated mandatory fields';
-    const expectedExceptionMessage: string = 'Attendee name, email and ssn cannot be duplicated';
- 
-    serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+    const expectedExceptionMessage: string = 'Atendee name cannot be duplicated';
+
+    await serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+
   });
+
+  /*
  
   it('t11_updateAtendeeWithAutomaticFields', () => {
  

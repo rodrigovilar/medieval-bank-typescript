@@ -51,4 +51,15 @@ export class AtendeeServiceHelper {
         return createdAtendee;
     }
 
+    public async deleteAll(service: AtendeeService): Promise<void> {
+        let atendeeList: Atendee[] = await service.findAll();
+
+        if (atendeeList.length > 0) {
+            // --- deletar todo mundo, porque pode ter vários mesmos nomes sendo criado acima nos outros testes
+            atendeeList.forEach(async (atendee) => {
+                await service.delete(atendee.id);
+            });
+        }
+    }
+
 }
