@@ -23,7 +23,7 @@ export class AtendeeServiceHelper {
         expectedExceptionMessage: string): Promise<void> {
 
         try {
-            let createdAtendee = await this.createAtendee(service, atendee.name, atendee.email, atendee.ssn);
+            await this.createAtendee(service, atendee.name, atendee.email, atendee.ssn);
             fail(failMessage);
         } catch (error) {
             expect(expectedExceptionMessage).toEqual(error.message);

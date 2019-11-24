@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotNullException } from '../../Exceptions/not-null-exception';
+import { NotDuplicatedException } from '../../Exceptions/not-duplicated-exception';
 
 /**
  * This class will be responsible for the logic of CRUD.
@@ -19,6 +20,7 @@ export class AtendeeService {
     // CREATE
     async create(atendee: Atendee): Promise<Atendee> {
         this.validateWithoutName(atendee);
+        await this.validateDuplicatedName(atendee);
         atendee.date = new Date();
         return await this.atendeeRepository.save(atendee);
     }
@@ -48,5 +50,14 @@ export class AtendeeService {
     private validateWithoutName(atendee: Atendee): void {
         if (atendee.name == null)
             throw new NotNullException('Name is mandatory');
+    }
+
+    private async validateDuplicatedName(atendee: Atendee): Promise<void> {
+        await this.findAll().then(createdAtendees => {
+            createdAtendees.forEach(value => {
+                if (value.name == atendee.name)
+                    throw new NotDuplicatedException('Atendee name cannot be duplicated');
+            })
+        })
     }
 }

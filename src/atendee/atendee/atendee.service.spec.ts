@@ -57,7 +57,7 @@ describe('AtendeeService', () => {
     let atendee: Atendee = new Atendee();
 
     atendee.name = null;
-    atendee.email = EXAMPLE_EMAIL;
+    atendee.email = 'Elza';
     atendee.ssn = EXAMPLE_SSN;
 
 
@@ -69,45 +69,52 @@ describe('AtendeeService', () => {
 
   });
 
+  it('t03_atendeeNameDuplicated', async () => {
+
+    // creating first atendee
+    await serviceHelper.createAtendee(service, 'Carlos', EXAMPLE_EMAIL, EXAMPLE_SSN);
+
+    // creating second atendee
+    let atendee2 = new Atendee();
+
+    atendee2.name = 'Carlos'; // The same name!
+    atendee2.email = EXAMPLE_EMAIL;
+    atendee2.ssn = EXAMPLE_SSN;
+
+    const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
+
+    const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
+
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+  });
+
   /*
-    it('t03_atendeeNameDuplicated', () => {
-  
-      // creating first atendee
-      serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-  
-      // creating second atendee
-      let atendee2 = new Atendee();
-  
-      atendee2.name = EXAMPLE_NAME; // The same name!
-      atendee2.email = EXAMPLE_EMAIL;
-      atendee2.ssn = EXAMPLE_SSN;
-  
-      const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
-  
-      const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
-  
-      serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
-    });
-    it('t04_createAtendeeWithAutomaticFields', () => {
+    it('t04_createAtendeeWithAutomaticFields', async () => {
   
   
       // creating first atendee
       let atendee = new Atendee();
-      atendee.name = EXAMPLE_NAME;
+      atendee.name = 'Lucio';
+      atendee.email = '@abc';
       atendee.id = 123;
   
       let failMessage = "Test failed because the system accepted to create atendee with id already set";
       let expectedExceptionMessage = "Atendee id cannot be set";
   
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+      await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  
+      let failMessage2 = "Test failed because the system accepted to create atendee with date already set";
+      let expectedExceptionMessage2 = "Atendee date cannot be set";
   
       let atendee2 = new Atendee();
-      atendee2.name = EXAMPLE_NAME;
-      atendee2.setCreation(new Date());
+      atendee2.name = 'Aline';
+      atendee2.email = '@cde';
+      atendee2.date = (new Date());
   
-      serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+      await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage2, expectedExceptionMessage2);
     });
-  
+    */
+  /*
     it('t05_createAtendeeWithInvalidEmail', () => {
   
       let atendee = new Atendee();
@@ -125,7 +132,7 @@ describe('AtendeeService', () => {
       atendee.email = 'sdsdfa@gmail';
       serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
-  */
+    */
   /*
    it('t06_updateAtendee', async () => {
  
@@ -161,11 +168,6 @@ describe('AtendeeService', () => {
 
   /*
 let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, '');
-
- 
-
-
- 
 
 serviceHelper.validateAtendee(otherName, otherEmail, updatedAtendee);
 
