@@ -4,6 +4,7 @@ import { Repository, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotNullException } from '../../Exceptions/not-null-exception';
 import { NotDuplicatedException } from '../../Exceptions/not-duplicated-exception';
+import { ExistObject } from '../../Exceptions/exist-object';
 
 /**
  * This class will be responsible for the logic of CRUD.
@@ -20,8 +21,9 @@ export class AtendeeService {
     // CREATE
     async create(atendee: Atendee): Promise<Atendee> {
         this.validateWithoutName(atendee);
+        await this.validateId(atendee);
         await this.validateDuplicatedName(atendee);
-        atendee.date = new Date();
+        this.validateDate(atendee);
         return await this.atendeeRepository.save(atendee);
     }
 
@@ -47,6 +49,11 @@ export class AtendeeService {
         return await this.atendeeRepository.delete(id);
     }
 
+    //GET ID
+    async getId(atendee: Atendee): Promise<number> {
+        return await this.atendeeRepository.getId(atendee)
+    }
+
     private validateWithoutName(atendee: Atendee): void {
         if (atendee.name == null)
             throw new NotNullException('Name is mandatory');
@@ -59,5 +66,18 @@ export class AtendeeService {
                     throw new NotDuplicatedException('Atendee name cannot be duplicated');
             })
         })
+    }
+
+    private async validateId(atendee: Atendee): Promise<void> {
+        let createdAtendees = await this.findAll();
+        createdAtendees.forEach(value => {
+            if (value.id == atendee.id)
+                throw new ExistObject('Atendee id cannot be set');
+        })
+    }
+
+    private validateDate(atendee: Atendee): void {
+        if (atendee.date == null)
+            throw new NotNullException('Date is mandatory');
     }
 }
