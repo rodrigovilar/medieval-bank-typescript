@@ -280,108 +280,107 @@ describe('AtendeeService', () => {
 
     await serviceHelper.tryDeleteAtendeeSuccessfully(service, atendee, failMessage, expectedExceptionMessage);
   });
-  /*  
-     it("t14_deleteAtendeeThatDoesNotExist", () => {
-    
-       let atendee = new Atendee();
-       atendee.id = 123;
-       atendee.name = EXAMPLE_NAME;
-       atendee.email = EXAMPLE_EMAIL;
-       atendee.ssn = EXAMPLE_SSN;
-    
-       const expectedExceptionMessage = 'Atendee does not exist';
-       const failMessage = "Test failed because system 'deleted' an attendant that does not exist";
-    
-       serviceHelper.tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-     });
-    
-     it("t15_getAllAtendee", () => {
-    
-       let atendee1 = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-       let atendee2 = serviceHelper.createAtendee(service, 'Meytal Cohen', 'meytalcohen@gmail.com', '123-76-7120');
-       let atendee3 = serviceHelper.createAtendee(service, 'Bio Gates', 'bil.gates@hotmail.com', '623-76-2255');
-    
-       let atendeeList: Atendee[] = service.getAll();
-    
-       expect(atendeeList.length).toEqual(3);
-       expect(atendeeList[0]).toEqual(atendee1);
-       expect(atendeeList[1]).toEqual(atendee2);
-       expect(atendeeList[2]).toEqual(atendee3);
-     });
-    
-     it('t16_filterByField', () => {
-    
-       let atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-       let atendeeMeytal = serviceHelper.createAtendee(service, 'Meytal Gates', 'meytalgates@gmail.com', '123-83-7120');
-       let atendeeBill = serviceHelper.createAtendee(service, 'Bill Gates', 'bill.gates@hotmail.com', '623-83-2255');
-    
-       let field: string = 'name';
-       let equalTo: string = 'marrone';
-       let filteredList: Atendee[] = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(0);
-    
-    
-       // names
-       field = 'name';
-       equalTo = 'gates';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(2);
-       expect(filteredList[0]).toEqual(atendeeMeytal);
-       expect(filteredList[1]).toEqual(atendeeBill);
-    
-       field = 'name';
-       equalTo = 'b';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(1);
-       expect(filteredList[0]).toEqual(atendeeBill);
-    
-       field = 'name';
-       equalTo = '4';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(0);
-       // and name
-    
-       // ssn
-       field = 'ssn';
-       equalTo = '83';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(2);
-       expect(filteredList[0]).toEqual(atendeeMeytal);
-       expect(filteredList[1]).toEqual(atendeeBill);
-    
-       field = 'ssn';
-       equalTo = '3';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(3);
-       expect(filteredList[0]).toEqual(atendee);
-       expect(filteredList[1]).toEqual(atendeeMeytal);
-       expect(filteredList[2]).toEqual(atendeeBill);
-    
-       field = 'ssn';
-       equalTo = '4';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(0);
-       // end ssn
-    
-       // email 
-       field = 'email';
-       equalTo = 'gmail';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(2);
-       expect(filteredList[0]).toEqual(atendee);
-       expect(filteredList[1]).toEqual(atendeeMeytal);
-    
-       field = 'email';
-       equalTo = 'hotmail';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(1);
-       expect(filteredList[0]).toEqual(atendeeBill);
-    
-       field = 'email';
-       equalTo = 'outlook';
-       filteredList = service.filterByField(field, equalTo);
-       expect(filteredList.length).toEqual(0);
-       // end email
-     });
- */
+  it("t14_deleteAtendeeThatDoesNotExist", async () => {
+
+    let atendee = new Atendee();
+    atendee.id = 123;
+    atendee.name = 'José';
+    atendee.email = EXAMPLE_EMAIL;
+    atendee.ssn = EXAMPLE_SSN;
+
+    const expectedExceptionMessage = 'Atendee not found';
+    const failMessage = "Test failed because system 'deleted' an attendant that does not exist";
+
+    await serviceHelper.tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  });
+  /*
+       it("t15_getAllAtendee", () => {
+      
+         let atendee1 = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+         let atendee2 = serviceHelper.createAtendee(service, 'Meytal Cohen', 'meytalcohen@gmail.com', '123-76-7120');
+         let atendee3 = serviceHelper.createAtendee(service, 'Bio Gates', 'bil.gates@hotmail.com', '623-76-2255');
+      
+         let atendeeList: Atendee[] = service.getAll();
+      
+         expect(atendeeList.length).toEqual(3);
+         expect(atendeeList[0]).toEqual(atendee1);
+         expect(atendeeList[1]).toEqual(atendee2);
+         expect(atendeeList[2]).toEqual(atendee3);
+       });
+      
+       it('t16_filterByField', () => {
+      
+         let atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+         let atendeeMeytal = serviceHelper.createAtendee(service, 'Meytal Gates', 'meytalgates@gmail.com', '123-83-7120');
+         let atendeeBill = serviceHelper.createAtendee(service, 'Bill Gates', 'bill.gates@hotmail.com', '623-83-2255');
+      
+         let field: string = 'name';
+         let equalTo: string = 'marrone';
+         let filteredList: Atendee[] = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(0);
+      
+      
+         // names
+         field = 'name';
+         equalTo = 'gates';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(2);
+         expect(filteredList[0]).toEqual(atendeeMeytal);
+         expect(filteredList[1]).toEqual(atendeeBill);
+      
+         field = 'name';
+         equalTo = 'b';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(1);
+         expect(filteredList[0]).toEqual(atendeeBill);
+      
+         field = 'name';
+         equalTo = '4';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(0);
+         // and name
+      
+         // ssn
+         field = 'ssn';
+         equalTo = '83';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(2);
+         expect(filteredList[0]).toEqual(atendeeMeytal);
+         expect(filteredList[1]).toEqual(atendeeBill);
+      
+         field = 'ssn';
+         equalTo = '3';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(3);
+         expect(filteredList[0]).toEqual(atendee);
+         expect(filteredList[1]).toEqual(atendeeMeytal);
+         expect(filteredList[2]).toEqual(atendeeBill);
+      
+         field = 'ssn';
+         equalTo = '4';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(0);
+         // end ssn
+      
+         // email 
+         field = 'email';
+         equalTo = 'gmail';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(2);
+         expect(filteredList[0]).toEqual(atendee);
+         expect(filteredList[1]).toEqual(atendeeMeytal);
+      
+         field = 'email';
+         equalTo = 'hotmail';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(1);
+         expect(filteredList[0]).toEqual(atendeeBill);
+      
+         field = 'email';
+         equalTo = 'outlook';
+         filteredList = service.filterByField(field, equalTo);
+         expect(filteredList.length).toEqual(0);
+         // end email
+       });
+   */
 });

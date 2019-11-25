@@ -47,6 +47,7 @@ export class AtendeeService {
 
     // DELETE
     async delete(id: number): Promise<DeleteResult> {
+        await this.validateGetOne(id);
         return await this.atendeeRepository.delete(id);
     }
 
