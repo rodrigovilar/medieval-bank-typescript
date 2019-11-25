@@ -2,9 +2,7 @@ import { Atendee } from './../atendee.entity';
 import { Injectable } from '@nestjs/common';
 import { Repository, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotNullException } from '../../Exceptions/not-null-exception';
-import { NotDuplicatedException } from '../../Exceptions/not-duplicated-exception';
-import { ExistObject } from '../../Exceptions/exist-object';
+import { AtendeeException } from '../../Exceptions/atendee-exception';
 
 /**
  * This class will be responsible for the logic of CRUD.
@@ -23,6 +21,7 @@ export class AtendeeService {
         this.validateWithoutName(atendee);
         await this.validateId(atendee);
         await this.validateDuplicatedName(atendee);
+        this.validateEmail(atendee);
         this.validateDate(atendee);
         atendee.date = new Date();
         return await this.atendeeRepository.save(atendee);
@@ -57,14 +56,14 @@ export class AtendeeService {
 
     private validateWithoutName(atendee: Atendee): void {
         if (atendee.name == null)
-            throw new NotNullException('Name is mandatory');
+            throw new AtendeeException('Name is mandatory');
     }
 
     private async validateDuplicatedName(atendee: Atendee): Promise<void> {
         await this.findAll().then(createdAtendees => {
             createdAtendees.forEach(value => {
                 if (value.name == atendee.name)
-                    throw new NotDuplicatedException('Atendee name cannot be duplicated');
+                    throw new AtendeeException('Atendee name cannot be duplicated');
             })
         })
     }
@@ -73,12 +72,22 @@ export class AtendeeService {
         let createdAtendees = await this.findAll();
         createdAtendees.forEach(value => {
             if (value.id == atendee.id)
-                throw new ExistObject('Atendee id cannot be set');
+                throw new AtendeeException('Atendee id cannot be set');
         })
     }
 
     private validateDate(atendee: Atendee): void {
         if (atendee.date != null)
-            throw new NotNullException('Atendee date cannot be set');
+            throw new AtendeeException('Atendee date cannot be set');
+    }
+
+    private validateEmail(atendee: Atendee): void {
+
+        let regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        let serchfind = regexp.test(atendee.email);
+
+        if (serchfind == false)
+            throw new AtendeeException('Atendee e-mail format is invalid');
+
     }
 }

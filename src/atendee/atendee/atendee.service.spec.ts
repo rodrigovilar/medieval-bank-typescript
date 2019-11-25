@@ -96,12 +96,11 @@ describe('AtendeeService', () => {
   it('t04_createAtendeeWithAutomaticFields', async () => {
 
     // creating first atendee
-    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Fernando', null, '@abc', EXAMPLE_SSN);
-    console.log(createdAtendee.id)
+    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Fernando', null, 'a@abc.com', EXAMPLE_SSN);
     let atendee = new Atendee();
     atendee.name = 'Lucio';
     atendee.date = null;
-    atendee.email = '@abc';
+    atendee.email = 'a@abc.com';
     atendee.id = createdAtendee.id;
 
     let failMessage = "Test failed because the system accepted to create atendee with id already set";
@@ -114,30 +113,29 @@ describe('AtendeeService', () => {
 
     let atendee2 = new Atendee();
     atendee2.name = 'Aline';
-    atendee2.email = '@cde';
+    atendee2.email = 'a@cde.com';
     atendee2.date = new Date();
 
     await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage2, expectedExceptionMessage2);
   });
-  /*
-    it('t05_createAtendeeWithInvalidEmail', async () => {
-  
-      let atendee = new Atendee();
-      atendee.name = EXAMPLE_NAME;
-  
-      const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
-      const expectedExceptionMessage = "Atendee e-mail format is invalid";
-  
-      atendee.email = 'ssdd@.dd';
-      await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-  
-      atendee.email = 'sdsdfa#gmail.com';
-      await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-  
-      atendee.email = 'sdsdfa@gmail';
-      await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-    });
-    */
+
+  it('t05_createAtendeeWithInvalidEmail', async () => {
+
+    let atendee = new Atendee();
+    atendee.name = EXAMPLE_NAME;
+
+    const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
+    const expectedExceptionMessage = "Atendee e-mail format is invalid";
+
+    atendee.email = 'ssdd@.dd';
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    atendee.email = 'sdsdfa#gmail.com';
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    atendee.email = 'sdsdfa@gmail';
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  });
 
   /*
     it('t06_updateAtendee', async () => {
