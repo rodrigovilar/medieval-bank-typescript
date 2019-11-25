@@ -3,12 +3,23 @@ import { Atendee } from '../atendee.entity';
 
 
 export class AtendeeServiceHelper {
+
     public tryDeleteAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
         try {
-            service.delete(atendee);
+            service.delete(atendee.id);
             fail(failMessage);
         } catch (ex) {
             expect(expectedExceptionMessage).toEqual(ex.message);
+        }
+    }
+
+    public async tryDeleteAtendeeSuccessfully(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
+        try {
+            let createdAtendee = await service.getOne(atendee.id);
+            console.log(createdAtendee);
+            fail(failMessage);
+        } catch (error) {
+            expect(expectedExceptionMessage).toEqual(error.message);
         }
     }
 

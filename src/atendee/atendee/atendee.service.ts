@@ -34,6 +34,7 @@ export class AtendeeService {
 
     // READ BY ID
     async getOne(id: number): Promise<Atendee> {
+        await this.validateGetOne(id);
         return await this.atendeeRepository.findOne(id);
     }
 
@@ -45,13 +46,8 @@ export class AtendeeService {
     }
 
     // DELETE
-    async delete(id): Promise<DeleteResult> {
+    async delete(id: number): Promise<DeleteResult> {
         return await this.atendeeRepository.delete(id);
-    }
-
-    //GET ID
-    async getId(atendee: Atendee): Promise<number> {
-        return await this.atendeeRepository.getId(atendee)
     }
 
     private validateWithoutName(atendee: Atendee): void {
@@ -89,5 +85,11 @@ export class AtendeeService {
         if (serchfind == false)
             throw new AtendeeException('Atendee e-mail format is invalid');
 
+    }
+
+    private async validateGetOne(id: number): Promise<void> {
+        let createdAtendee = await this.atendeeRepository.findOne(id);
+        if (createdAtendee == undefined)
+            throw new AtendeeException('Atendee not found');
     }
 }
