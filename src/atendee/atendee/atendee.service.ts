@@ -24,6 +24,7 @@ export class AtendeeService {
         await this.validateId(atendee);
         await this.validateDuplicatedName(atendee);
         this.validateDate(atendee);
+        atendee.date = new Date();
         return await this.atendeeRepository.save(atendee);
     }
 
@@ -77,7 +78,7 @@ export class AtendeeService {
     }
 
     private validateDate(atendee: Atendee): void {
-        if (atendee.date == null)
-            throw new NotNullException('Date is mandatory');
+        if (atendee.date != null)
+            throw new NotNullException('Atendee date cannot be set');
     }
 }

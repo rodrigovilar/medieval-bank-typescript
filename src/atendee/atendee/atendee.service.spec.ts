@@ -50,7 +50,7 @@ describe('AtendeeService', () => {
 
 
   it('t01_createAtendee', async () => {
-    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, new Date(), EXAMPLE_EMAIL, null);
+    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, null);
     let searchedAtendee = await service.getOne(createdAtendee.id)
 
     expect(createdAtendee).toEqual(searchedAtendee);
@@ -62,7 +62,6 @@ describe('AtendeeService', () => {
     let atendee: Atendee = new Atendee();
 
     atendee.name = null;
-    atendee.date = new Date();
     atendee.email = 'Elza';
     atendee.ssn = EXAMPLE_SSN;
 
@@ -78,13 +77,12 @@ describe('AtendeeService', () => {
   it('t03_atendeeNameDuplicated', async () => {
 
     // creating first atendee
-    await serviceHelper.createAtendee(service, null, 'Carlos', new Date(), EXAMPLE_EMAIL, EXAMPLE_SSN);
+    await serviceHelper.createAtendee(service, null, 'Carlos', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     // creating second atendee
     let atendee2 = new Atendee();
 
     atendee2.name = 'Carlos'; // The same name!
-    atendee2.date = new Date();
     atendee2.email = EXAMPLE_EMAIL;
     atendee2.ssn = EXAMPLE_SSN;
 
@@ -98,11 +96,11 @@ describe('AtendeeService', () => {
   it('t04_createAtendeeWithAutomaticFields', async () => {
 
     // creating first atendee
-    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Fernando', new Date(), '@abc', EXAMPLE_SSN);
+    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Fernando', null, '@abc', EXAMPLE_SSN);
     console.log(createdAtendee.id)
     let atendee = new Atendee();
     atendee.name = 'Lucio';
-    atendee.date = new Date();
+    atendee.date = null;
     atendee.email = '@abc';
     atendee.id = createdAtendee.id;
 
@@ -112,18 +110,17 @@ describe('AtendeeService', () => {
     await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
     let failMessage2 = "Test failed because the system accepted to create atendee with date null";
-    let expectedExceptionMessage2 = "Date is mandatory";
+    let expectedExceptionMessage2 = "Atendee date cannot be set";
 
     let atendee2 = new Atendee();
     atendee2.name = 'Aline';
     atendee2.email = '@cde';
-    atendee2.date = null;
+    atendee2.date = new Date();
 
     await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage2, expectedExceptionMessage2);
   });
-
   /*
-    it('t05_createAtendeeWithInvalidEmail', () => {
+    it('t05_createAtendeeWithInvalidEmail', async () => {
   
       let atendee = new Atendee();
       atendee.name = EXAMPLE_NAME;
@@ -132,15 +129,16 @@ describe('AtendeeService', () => {
       const expectedExceptionMessage = "Atendee e-mail format is invalid";
   
       atendee.email = 'ssdd@.dd';
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+      await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
   
       atendee.email = 'sdsdfa#gmail.com';
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+      await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
   
       atendee.email = 'sdsdfa@gmail';
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+      await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
     });
-  */
+    */
+
   /*
     it('t06_updateAtendee', async () => {
   
