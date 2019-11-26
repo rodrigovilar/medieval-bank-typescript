@@ -58,6 +58,8 @@ export class AtendeeService {
             throw new Error('Atendee name cannot be duplicated')
         }
 
+        this.validadeEmail(atendee);
+
         this.atendeeRepository.update(atendee.id, atendee);
         return await this.getOne(atendee.id);
     }
@@ -65,6 +67,14 @@ export class AtendeeService {
     // DELETE
     async delete(id): Promise<DeleteResult> {
         return await this.atendeeRepository.delete(id);
+    }
+
+    private validadeEmail(atendee: Atendee): void {
+        let rgx = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+        if (!rgx.test(atendee.email)) {
+            throw new Error('Atendee e-mail format is invalid');
+        }
     }
 
     private validateWithoutName(atendee: Atendee): void {
