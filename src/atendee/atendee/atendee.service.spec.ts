@@ -54,7 +54,6 @@ describe('AtendeeService', () => {
     let searchedAtendee = await service.getOne(createdAtendee.id)
 
     expect(createdAtendee).toEqual(searchedAtendee);
-    expect('Cuscuz').toEqual('Cuscuz');
   });
 
   it('t02_createAtendeeWithoutName ', async () => {
