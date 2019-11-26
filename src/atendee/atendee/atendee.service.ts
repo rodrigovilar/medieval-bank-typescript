@@ -50,6 +50,10 @@ export class AtendeeService {
         if (atendee.ssn != searchedAtendee.ssn)
             throw new Error('Atendee SSN is immutable');
 
+        if (atendee.date.getTime() != searchedAtendee.date.getTime()) {
+            throw new Error('Atendee creation date cannot be changed');
+        }
+
         if (await this.haveDuplicateName(searchedAtendee, atendee)) {
             throw new Error('Atendee name cannot be duplicated')
         }

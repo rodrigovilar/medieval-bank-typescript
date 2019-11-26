@@ -44,6 +44,10 @@ describe('AtendeeService', () => {
     serviceHelper.deleteAll(service)
   });
 
+  beforeEach(async () => {
+    serviceHelper.deleteAll(service);
+  });
+
   it('should be defined', async () => {
     expect(service).toBeDefined();
   });
@@ -226,24 +230,27 @@ describe('AtendeeService', () => {
 
   });
 
-  /*
- 
-  it('t11_updateAtendeeWithAutomaticFields', () => {
- 
-    let createdAtendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+  it('t11_updateAtendeeWithAutomaticFields', async () => {
+
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
     let creationDate = createdAtendee.date;
- 
-    // updating date
-    createdAtendee.date = new Date("01/11/2019");
- 
-    createdAtendee.name = 'Meytal Cohen';
+
+    setInterval(async () => { }, 1000)
+    createdAtendee.date = new Date();
+
+    createdAtendee.name = "Meytal Cohen";
     createdAtendee.email = 'm@gmail.com';
     createdAtendee.ssn = '623-76-7120';
- 
-    let updatedAtendee = service.update(createdAtendee);
- 
+
+    const failMessage = "Test failed because the system accepted to update atendee with changed creation";
+    const expectedExceptionMessage = "Atendee creation date cannot be changed";
+    await serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
+
+    let updatedAtendee = await service.getOne(createdAtendee.id);
+
     expect(creationDate).toEqual(updatedAtendee.date);
   });
+  /*
  
   it('t12_updateAtendeeWithInvalidEmail', () => {
  

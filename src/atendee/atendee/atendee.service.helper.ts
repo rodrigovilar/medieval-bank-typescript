@@ -8,7 +8,7 @@ export class AtendeeServiceHelper {
             service.delete(atendee);
             fail(failMessage);
         } catch (ex) {
-            expect(expectedExceptionMessage).toEqual(ex.message);
+            expect(ex.message).toEqual(expectedExceptionMessage);
         }
     }
 
@@ -25,8 +25,8 @@ export class AtendeeServiceHelper {
         try {
             let createdAtendee = await this.createAtendee(service, atendee.name, atendee.email, atendee.ssn);
             fail(failMessage);
-        } catch (error) {
-            expect(expectedExceptionMessage).toEqual(error.message);
+        } catch (ex) {
+            expect(ex.message).toEqual(expectedExceptionMessage);
         }
     }
 
@@ -36,7 +36,7 @@ export class AtendeeServiceHelper {
             await service.update(atendee);
             fail(failMessage);
         } catch (ex) {
-            expect(expectedExceptionMessage).toEqual(ex.message);
+            expect(ex.message).toEqual(expectedExceptionMessage);
         }
     }
 
