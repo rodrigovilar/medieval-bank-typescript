@@ -13,7 +13,7 @@ export class AtendeeService {
     // The atendeeRepository will take care of CRUD
     @InjectRepository(Atendee)
     private readonly atendeeRepository: Repository<Atendee>,
-  ) {}
+  ) { }
 
   // CREATE
   async create(atendee: Atendee): Promise<Atendee> {
@@ -87,6 +87,6 @@ export class AtendeeService {
   private async validateGetOne(id: number): Promise<void> {
     let createdAtendee = await this.atendeeRepository.findOne(id);
     if (createdAtendee == undefined)
-      throw new AtendeeException('Atendee not found');
+      throw new AtendeeException('Atendee not found id: ' + id);
   }
 }

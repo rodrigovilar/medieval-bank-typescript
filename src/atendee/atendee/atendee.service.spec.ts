@@ -274,7 +274,7 @@ describe('AtendeeService', () => {
 
     await service.delete(atendee.id);
 
-    const expectedExceptionMessage = 'Atendee not found';
+    const expectedExceptionMessage = 'Atendee not found id: ' + atendee.id;
     const failMessage = "The test failed because the system returned the attendant when it should not have found";
 
     await serviceHelper.tryDeleteAtendeeSuccessfully(service, atendee, failMessage, expectedExceptionMessage);
@@ -287,7 +287,7 @@ describe('AtendeeService', () => {
     atendee.email = EXAMPLE_EMAIL;
     atendee.ssn = EXAMPLE_SSN;
 
-    const expectedExceptionMessage = 'Atendee not found';
+    const expectedExceptionMessage = 'Atendee not found id: ' + atendee.id;
     const failMessage = "Test failed because system 'deleted' an attendant that does not exist";
 
     await serviceHelper.tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
