@@ -327,23 +327,24 @@ describe('AtendeeService', () => {
 
   });
 
+  test("t15_getAllAtendee", async () => {
+
+    let atendee1 = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let atendee2 = await serviceHelper.createAtendee(service, null, 'Meytal Cohen', null, 'meytalcohen@gmail.com', '123-76-7120');
+    let atendee3 = await serviceHelper.createAtendee(service, null, 'Bio Gates', null, 'bil.gates@hotmail.com', '623-76-2255');
+
+    let atendeeList = await service.findAll();
+
+    expect(atendeeList.length).toEqual(3);
+    expect(atendee1).toEqual(atendeeList[0]);
+    expect(atendee2).toEqual(atendeeList[1]);
+    expect(atendee3).toEqual(atendeeList[2]);
+
+    //eliminate a warning in try-catch console
+    await service.getOne(atendee1.id);
+  });
 
   /*
- 
-  it("t15_getAllAtendee", () => {
- 
-    let atendee1 = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-    let atendee2 = serviceHelper.createAtendee(service, 'Meytal Cohen', 'meytalcohen@gmail.com', '123-76-7120');
-    let atendee3 = serviceHelper.createAtendee(service, 'Bio Gates', 'bil.gates@hotmail.com', '623-76-2255');
- 
-    let atendeeList: Atendee[] = service.getAll();
- 
-    expect(atendeeList.length).toEqual(3);
-    expect(atendeeList[0]).toEqual(atendee1);
-    expect(atendeeList[1]).toEqual(atendee2);
-    expect(atendeeList[2]).toEqual(atendee3);
-  });
- 
   it('t16_filterByField', () => {
  
     let atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
