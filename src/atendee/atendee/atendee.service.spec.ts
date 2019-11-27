@@ -39,34 +39,29 @@ describe('AtendeeService', () => {
     serviceHelper = new AtendeeServiceHelper();
   });
 
-  // delete all atendees
-  afterEach(async () => {
-    serviceHelper.deleteAll(service)
-  });
+  afterAll(async () => await serviceHelper.deleteAll(service));
 
-  beforeEach(async () => {
-    serviceHelper.deleteAll(service);
-  });
+  afterEach(async () => await serviceHelper.deleteAll(service));
+
 
   it('should be defined', async () => {
     expect(service).toBeDefined();
   });
 
-
-  it('t01_createAtendee', async () => {
-    let createdAtendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, null);
+  // --------------- INICIO RUAN
+  test('t01_createAtendee', async () => {
+    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, null);
     let searchedAtendee = await service.getOne(createdAtendee.id)
 
     expect(createdAtendee).toEqual(searchedAtendee);
-    expect('Cuscuz').toEqual('Cuscuz');
   });
 
-  it('t02_createAtendeeWithoutName ', async () => {
+  test('t02_createAtendeeWithoutName ', async () => {
 
     let atendee: Atendee = new Atendee();
 
     atendee.name = null;
-    atendee.email = EXAMPLE_EMAIL;
+    atendee.email = 'Elza';
     atendee.ssn = EXAMPLE_SSN;
 
 
@@ -78,67 +73,85 @@ describe('AtendeeService', () => {
 
   });
 
-  /*
-    it('t03_atendeeNameDuplicated', () => {
-  
-      // creating first atendee
-      serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-  
-      // creating second atendee
-      let atendee2 = new Atendee();
-  
-      atendee2.name = EXAMPLE_NAME; // The same name!
-      atendee2.email = EXAMPLE_EMAIL;
-      atendee2.ssn = EXAMPLE_SSN;
-  
-      const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
-  
-      const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
-  
-      serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
-    });
-    it('t04_createAtendeeWithAutomaticFields', () => {
-  
-  
-      // creating first atendee
-      let atendee = new Atendee();
-      atendee.name = EXAMPLE_NAME;
-      atendee.id = 123;
-  
-      let failMessage = "Test failed because the system accepted to create atendee with id already set";
-      let expectedExceptionMessage = "Atendee id cannot be set";
-  
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-  
-      let atendee2 = new Atendee();
-      atendee2.name = EXAMPLE_NAME;
-      atendee2.setCreation(new Date());
-  
-      serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
-    });
-  
-    it('t05_createAtendeeWithInvalidEmail', () => {
-  
-      let atendee = new Atendee();
-      atendee.name = EXAMPLE_NAME;
-  
-      const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
-      const expectedExceptionMessage = "Atendee e-mail format is invalid";
-  
-      atendee.email = 'ssdd@.dd';
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-  
-      atendee.email = 'sdsdfa#gmail.com';
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-  
-      atendee.email = 'sdsdfa@gmail';
-      serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
-    });
-  */
+  test('t03_atendeeNameDuplicated', async () => {
 
-  it('t06_updateAtendee', async () => {
+    // creating first atendee
+    await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
-    let createdAtendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    // creating second atendee
+    let atendee2 = new Atendee();
+
+    atendee2.name = EXAMPLE_NAME; // The same name!
+    atendee2.email = EXAMPLE_EMAIL;
+    atendee2.ssn = EXAMPLE_SSN;
+
+    const failMessage: string = 'Test failed because the system accepted to create atendee with duplicated name';
+
+    const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
+
+
+
+    // try {
+    //   await service.create(atendee2);
+    //   console.log('Deu error')
+    //   fail(failMessage);
+    // } catch (error) {
+    //   expect(error.message).toEqual(expectedExceptionMessage);
+    // }
+
+
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+  });
+
+  test('t04_createAtendeeWithAutomaticFields', async () => {
+
+    // creating first atendee
+    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Fernando', null, 'a@abc.com', EXAMPLE_SSN);
+    let atendee = new Atendee();
+    atendee.name = 'Lucio';
+    atendee.date = null;
+    atendee.email = 'a@abc.com';
+    atendee.id = createdAtendee.id;
+
+    let failMessage = "Test failed because the system accepted to create atendee with id already set";
+    let expectedExceptionMessage = "Atendee id cannot be set";
+
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    let failMessage2 = "Test failed because the system accepted to create atendee with date null";
+    let expectedExceptionMessage2 = "Atendee date cannot be set";
+
+    let atendee2 = new Atendee();
+    atendee2.name = 'Aline';
+    atendee2.email = 'a@cde.com';
+    atendee2.date = new Date();
+
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage2, expectedExceptionMessage2);
+  });
+
+  test('t05_createAtendeeWithInvalidEmail', async () => {
+
+    let atendee = new Atendee();
+    atendee.name = EXAMPLE_NAME;
+
+    const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
+    const expectedExceptionMessage = "Atendee e-mail format is invalid";
+
+    atendee.email = 'ssdd@.dd';
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    atendee.email = 'sdsdfa#gmail.com';
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    atendee.email = 'sdsdfa@gmail';
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+  });
+  // --------------- FINAL  RUAN
+
+
+  test('t06_updateAtendee', async () => {
+
+    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     // updating fields
     const otherEmail: string = 'other@email.com';
@@ -157,9 +170,9 @@ describe('AtendeeService', () => {
 
   });
 
-  it('t07_updateAtendeeWithImmutableFields', async () => {
+  test('t07_updateAtendeeWithImmutableFields', async () => {
 
-    let createdAtendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.ssn = '670-03-8924';
 
@@ -171,7 +184,7 @@ describe('AtendeeService', () => {
   });
 
 
-  it('t08_updateAtendeeWithUnknownId', async () => {
+  test('t08_updateAtendeeWithUnknownId', async () => {
 
     let atendeeUnknownId: Atendee = new Atendee();
     atendeeUnknownId.id = UNKNOWN;
@@ -182,7 +195,7 @@ describe('AtendeeService', () => {
 
     await serviceHelper.tryUpdateAtendeeWithError(service, atendeeUnknownId, failMessage, expectedExceptionMessage);
 
-    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.id = UNKNOWN;
     createdAtendee.name = 'Meytal cohen';
@@ -194,9 +207,9 @@ describe('AtendeeService', () => {
     await serviceHelper.tryUpdateAtendeeWithError(service, createdAtendee, failMessage, expectedExceptionMessage);
   });
 
-  it('t09_updateAtendeeWithoutName', async () => {
+  test('t09_updateAtendeeWithoutName', async () => {
 
-    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.name = '';
     createdAtendee.email = '';
@@ -216,10 +229,10 @@ describe('AtendeeService', () => {
 
   });
 
-  it('t10_updateAtendeeWithDuplicatedName', async () => {
+  test('t10_updateAtendeeWithDuplicatedName', async () => {
 
-    await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, 'Meytal cohen', EXAMPLE_EMAIL, EXAMPLE_SSN);
+    await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, 'Meytal cohen', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.name = EXAMPLE_NAME;
 
@@ -230,9 +243,9 @@ describe('AtendeeService', () => {
 
   });
 
-  it('t11_updateAtendeeWithAutomaticFields', async () => {
+  test('t11_updateAtendeeWithAutomaticFields', async () => {
 
-    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
     let creationDate = createdAtendee.date;
 
     setInterval(async () => { }, 1000)
@@ -251,9 +264,9 @@ describe('AtendeeService', () => {
     expect(creationDate).toEqual(updatedAtendee.date);
   });
 
-  it('t12_updateAtendeeWithInvalidEmail', async () => {
+  test('t12_updateAtendeeWithInvalidEmail', async () => {
 
-    let atendee: Atendee = await serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let atendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     const failMessage = "Test failed because the system accepted to update atendee with invalid e-mail format";
     const expectedExceptionMessage = "Atendee e-mail format is invalid";
@@ -268,38 +281,54 @@ describe('AtendeeService', () => {
     await serviceHelper.tryUpdateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
   });
-  /*
- 
-  it('t13_deleteAtendee', () => {
- 
-    let atendee: Atendee = serviceHelper.createAtendee(service, EXAMPLE_NAME, EXAMPLE_EMAIL, EXAMPLE_SSN);
-    let deleteAtendee: Atendee = service.delete(atendee);
- 
-    expect(deleteAtendee).toEqual(atendee);
- 
-    const expectedExceptionMessage = 'Atendee not found';
-    const failMessage = "The test failed because the system returned the attendant when it should not have found";
-    try {
-      service.getOne(atendee.id);
-      fail(failMessage);
-    } catch (ex) {
-      expect(expectedExceptionMessage).toEqual(ex.message);
-    }
+
+  test('t13_deleteAtendee', async () => {
+
+    let atendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+
+    await service.delete(atendee.id);
+
+    let searchedAtendee = await service.getOne(atendee.id);
+    expect(searchedAtendee).toBeUndefined();
+
   });
- 
-  it("t14_deleteAtendeeThatDoesNotExist", () => {
- 
+
+
+  test("t14_deleteAtendeeThatDoesNotExist", async () => {
     let atendee = new Atendee();
     atendee.id = 123;
-    atendee.name = EXAMPLE_NAME;
+    atendee.name = 'José';
     atendee.email = EXAMPLE_EMAIL;
     atendee.ssn = EXAMPLE_SSN;
- 
-    const expectedExceptionMessage = 'Atendee does not exist';
-    const failMessage = "Test failed because system 'deleted' an attendant that does not exist";
- 
-    serviceHelper.tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    let searchedAtendee = await service.getOne(atendee.id)
+    expect(searchedAtendee).toBeUndefined();
+
+    const failMessage = "Test failed because the system accepted to delete a null atendee";
+    const expectedExceptionMessage = `Atendee not found id: ${atendee.id}`;
+
+    await serviceHelper.tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
+
+    // let atendeeMeytal: Atendee = await serviceHelper.createAtendee(service, null, 'Meytal cohen', null, 'meytal@gmail.com', EXAMPLE_SSN);
+    // let atendeeBio: Atendee = await serviceHelper.createAtendee(service, null, 'Bio Gates', null, 'bio@gmail.com', EXAMPLE_SSN);
+    // let atendeeSpider: Atendee = await serviceHelper.createAtendee(service, null, 'Spider Man', null, 'spider@gmail.com', EXAMPLE_SSN);
+
+    // //
+    // searchedAtendee = await service.getOne(atendeeMeytal.id)
+    // serviceHelper.compareAtendees(atendeeMeytal, searchedAtendee);
+
+    // //
+    // searchedAtendee = await service.getOne(atendeeBio.id)
+    // serviceHelper.compareAtendees(atendeeBio, searchedAtendee);
+
+    // //
+    // searchedAtendee = await service.getOne(atendeeSpider.id)
+    // serviceHelper.compareAtendees(atendeeSpider, searchedAtendee);
+
   });
+
+
+  /*
  
   it("t15_getAllAtendee", () => {
  

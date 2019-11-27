@@ -3,9 +3,36 @@ import { Atendee } from '../atendee.entity';
 
 
 export class AtendeeServiceHelper {
-    public tryDeleteAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
+    compareAtendees(oneAtendee: Atendee, twoAtendee: Atendee): void {
+
+        let first = new Atendee();
+        first.id = oneAtendee.id
+        first.name = oneAtendee.name
+        first.date = oneAtendee.date
+        first.ssn = oneAtendee.ssn
+
+        let second = new Atendee();
+        second.id = twoAtendee.id
+        second.name = twoAtendee.name
+        second.date = twoAtendee.date
+        second.ssn = twoAtendee.ssn
+
+        expect(first).toEqual(second);
+    }
+
+    public async tryDeleteAtendeeSuccessfully(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
         try {
-            service.delete(atendee);
+            let createdAtendee = await service.getOne(atendee.id);
+            console.log(createdAtendee);
+            fail(failMessage);
+        } catch (error) {
+            expect(expectedExceptionMessage).toEqual(error.message);
+        }
+    }
+
+    public async tryDeleteAtendeeWithError(service: AtendeeService, atendee: Atendee, failMessage: string, expectedExceptionMessage: string) {
+        try {
+            await service.delete(atendee.id);
             fail(failMessage);
         } catch (ex) {
             expect(ex.message).toEqual(expectedExceptionMessage);
@@ -23,7 +50,7 @@ export class AtendeeServiceHelper {
         expectedExceptionMessage: string): Promise<void> {
 
         try {
-            let createdAtendee = await this.createAtendee(service, atendee.name, atendee.email, atendee.ssn);
+            await this.createAtendee(service, atendee.id, atendee.name, atendee.date, atendee.email, atendee.ssn);
             fail(failMessage);
         } catch (ex) {
             expect(ex.message).toEqual(expectedExceptionMessage);
@@ -40,9 +67,11 @@ export class AtendeeServiceHelper {
         }
     }
 
-    public async createAtendee(service: AtendeeService, name: string, email: string, ssn: string): Promise<Atendee> {
+    public async createAtendee(service: AtendeeService, id: number, name: string, date: Date, email: string, ssn: string): Promise<Atendee> {
         let atendee = new Atendee();
+        atendee.id = id;
         atendee.name = name;
+        atendee.date = date;
         atendee.email = email;
         atendee.ssn = ssn;
 

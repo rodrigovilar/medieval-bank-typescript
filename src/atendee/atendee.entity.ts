@@ -15,7 +15,7 @@ export class Atendee {
     @Column({ nullable: false })
     date: Date;
 
-    @Column()
+    @Column({ nullable: true })
     email: string;
 
     @Column({ nullable: true })
