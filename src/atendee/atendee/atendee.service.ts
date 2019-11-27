@@ -77,6 +77,20 @@ export class AtendeeService {
 
   }
 
+  async filterByField(field: string, value: string): Promise<Atendee[]> {
+
+    // script sqlite
+    let query: string = `SELECT * FROM atendee WHERE ${field} LIKE '%${value}%'`;
+    //console.log('query: ', query);
+    let list: Atendee[] = await this.atendeeRepository.query(query);
+
+    //console.log('<><<><')
+    //console.log(list)
+
+    return list;
+  }
+
+
   private validadeEmail(atendee: Atendee): void {
     let rgx = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
