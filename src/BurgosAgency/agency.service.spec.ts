@@ -1,37 +1,47 @@
-import { AtendeeService } from "src/atendee/atendee/atendee.service";
+import { BurgosAgency } from './burgos-agency';
 
-export class AgencyService {
-    private atendeeService: AtendeeService;
-    private name: string;
-    private manager: string;
+import { AtendeeServiceHelper } from '../atendee/atendee/atendee.service.helper';
+import { AtendeeService } from '../atendee/atendee/atendee.service';
+import {AtendeeModule} from '../atendee/atendee.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Test } from '@nestjs/testing';
+import {Atendee} from '../atendee/atendee.entity';
+import { AgencyService } from './agency.service';
+import { AgencyModule } from './agency.module';
 
-    constructor(name: string, manager: string, atendeeService: AtendeeService){
-        this.name = name;
-        this.manager = manager;
-        this.atendeeService = atendeeService
-    }
+describe('AgencyService', () => {
+  let agencyService: AgencyService;
 
-    public getName(): string {
-        return this.name;
-    }
 
-    public setName(name: string): void {
-        this.name = name;
-    }
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      imports: [AgencyModule,
 
-    public getManager(): string{
-        return this.manager;
-    }
+        // database
+        TypeOrmModule.forRoot({
+          type: 'sqlite',
+          database: 'burgosDB',
+          entities: [Atendee],
+          synchronize: true
+        })]
+    }).compile();
+    agencyService = module.get(AgencyService);
+  });
 
-    public setManager(name: string): void {
-        this.manager = name;
-    }
+  //afterAll(async () => await serviceHelper.deleteAll(atendeeService));
 
-    public getAtendeeService(){
-        return this.atendeeService;
-    }
+ // afterEach(async () => await serviceHelper.deleteAll(atendeeService));
 
-    public setAtendeeService(atendeeService: AtendeeService){
-        this.atendeeService = atendeeService;
-    }
-}   
+  it('t018_AgencyStatuswithoneAtendee', function () {
+    agencyService.setName('Burgosland');
+    let result = agencyService.getName();
+    expect(result).toBe('Burgosland');
+  });
+  
+  it('t015_agencyStatusWithoutAtendee', function () {
+    agencyService.setName('Burgosland');
+    let result = agencyService.getName();
+    expect(result).toBe('Burgosland');
+  });
+
+});

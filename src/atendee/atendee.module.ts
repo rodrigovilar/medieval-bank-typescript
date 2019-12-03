@@ -13,7 +13,8 @@ import { Atendee } from './atendee.entity';
     AtendeeService
   ],
   exports: [
-    TypeOrmModule
+    TypeOrmModule,
+    AtendeeService
   ],
   controllers: [AtendeeController]
 })
