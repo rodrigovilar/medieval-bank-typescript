@@ -1,5 +1,6 @@
 # database name
 burgosDB
+burgosDB-journal
 
 # compiled output
 /dist

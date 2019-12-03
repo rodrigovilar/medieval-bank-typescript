@@ -1,5 +1,3 @@
-import { AtendeeRepository } from './atendee/atendee.repository';
-
 import { Module } from '@nestjs/common';
 import { AtendeeService } from './atendee/atendee.service';
 import { AtendeeController } from './atendee/atendee.controller';

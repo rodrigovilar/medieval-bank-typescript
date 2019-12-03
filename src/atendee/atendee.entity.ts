@@ -9,13 +9,13 @@ export class Atendee {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: false })
     name: string;
 
     @Column({ nullable: false })
     date: Date;
 
-    @Column()
+    @Column({ nullable: true })
     email: string;
 
     @Column({ nullable: true })
