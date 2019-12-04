@@ -42,9 +42,6 @@ describe('AgencyService', () => {
   it('t015_agencyStatusWithoutAtendee', async function () {
     const status: string = await agencyService.getStatus();
 
-    console.log(">>>>\n");
-    console.log(status);
-
     const expectedResult = "Atendees: []\nQueue: []"
     expect(status).toBe(expectedResult);
   });

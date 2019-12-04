@@ -15,7 +15,7 @@ export class AgencyService {
 
     async getStatus(): Promise<string> {
         const atendeeList = await this.atendeeService.findAll();
-        return `Atendees: ${atendeeList}\nQueue: ${this.queue}`;
+        return `Atendees: [${atendeeList.toString()}]\nQueue: [${this.queue.toString()}]`;
     }
 
     public getName(): string {
