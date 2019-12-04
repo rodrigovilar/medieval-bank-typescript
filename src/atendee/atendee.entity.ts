@@ -20,4 +20,8 @@ export class Atendee {
 
     @Column({ nullable: true })
     ssn: string;
+
+    toString(): string{
+        return this.name;
+    }
 }
