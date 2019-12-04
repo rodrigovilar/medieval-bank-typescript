@@ -26,6 +26,7 @@ describe('AgencyService', () => {
         })]
     }).compile();
     agencyService = module.get(AgencyService);
+    agencyService.setAtendeeService( await module.get(AtendeeService));
   });
 
   //afterAll(async () => await serviceHelper.deleteAll(atendeeService));
@@ -38,10 +39,14 @@ describe('AgencyService', () => {
     expect(result).toBe('Burgosland');
   });
   
-  it('t015_agencyStatusWithoutAtendee', function () {
-    agencyService.setName('Burgosland');
-    let result = agencyService.getName();
-    expect(result).toBe('Burgosland');
+  it('t015_agencyStatusWithoutAtendee', async function () {
+    const status: string = await agencyService.getStatus();
+
+    console.log(">>>>\n");
+    console.log(status);
+
+    const expectedResult = "Atendees: []\nQueue: []"
+    expect(status).toBe(expectedResult);
   });
 
 });

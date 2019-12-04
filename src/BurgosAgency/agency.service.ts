@@ -7,13 +7,15 @@ export class AgencyService {
     private atendeeService: AtendeeService;
     private name: string;
     private manager: string;
+    private queue: any [] = [];
 
     constructor(){
         
     }
 
-    getStatus(): any {
-        throw new Error("Method not implemented.");
+    async getStatus(): Promise<string> {
+        const atendeeList = await this.atendeeService.findAll();
+        return `Atendees: ${atendeeList}\nQueue: ${this.queue}`;
     }
 
     public getName(): string {
