@@ -2,10 +2,11 @@
 import { Module } from '@nestjs/common';
 import { AtendeeModule } from './atendee/atendee.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AgencyModule } from './BurgosAgency/agency.module';
 
 
 @Module({
-  imports: [AtendeeModule,
+  imports: [AtendeeModule, AgencyModule,
 
     // database
     TypeOrmModule.forRoot({
