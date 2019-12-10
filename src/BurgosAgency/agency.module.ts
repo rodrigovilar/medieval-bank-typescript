@@ -3,17 +3,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgencyService } from './agency.service';
 import { AgencyController } from './agency.controller';
 import { AtendeeModule } from '../atendee/atendee.module';
+import {DemandModule} from '../demand/demand.module';
 
 @Module({
 
   imports: [
-      AtendeeModule
+      AtendeeModule,
+      DemandModule,
   ],
   providers: [
-    AgencyService
+    AgencyService,
   ],
   exports: [
   ],
-  controllers: [AgencyController]
+  controllers: [AgencyController],
 })
 export class AgencyModule { }
