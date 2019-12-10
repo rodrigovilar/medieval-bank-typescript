@@ -49,12 +49,12 @@ describe('AtendeeService', () => {
   });
 
   // --------------- INICIO RUAN
-  // test('t01_createAtendee', async () => {
-  //   let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, null);
-  //   let searchedAtendee = await service.getOne(createdAtendee.id)
+  test('t01_createAtendee', async () => {
+    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, null);
+    let searchedAtendee = await service.getOne(createdAtendee.id)
 
-  //   expect(createdAtendee).toEqual(searchedAtendee);
-  // });
+    expect(createdAtendee).toEqual(searchedAtendee);
+  });
 
   test('t02_createAtendeeWithoutName ', async () => {
 

@@ -1,23 +1,37 @@
-import { AtendeeService } from "src/atendee/atendee/atendee.service";
-import { Injectable } from "@nestjs/common";
-import { Atendee } from "src/atendee/atendee.entity";
+import { AtendeeService } from 'src/atendee/atendee/atendee.service';
+import { Injectable } from '@nestjs/common';
+import { Atendee } from 'src/atendee/atendee.entity';
+import {DemandService} from '../demand/demand.service';
+import {Demand} from '../demand/demand.entity';
 
 @Injectable()
 export class AgencyService {
-    
     private atendeeService: AtendeeService;
+    private demandService: DemandService;
     private name: string;
     private manager: string;
     private queue: any [] = [];
 
-    constructor(){
-        
-    }
-    
     async addAtendee(attendee: Atendee) {
-        try{
+        try {
             await this.atendeeService.create(attendee);
-        } catch (e){
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    }
+
+    async addDemand(demand: Demand) {
+        try {
+            await this.demandService.create(demand);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    }
+
+    async deleteDemand(demand: Demand) {
+        try {
+            await this.demandService.delete(demand.id);
+        } catch (e) {
             throw new Error(e.message);
         }
     }
@@ -32,7 +46,8 @@ export class AgencyService {
 
     async getStatus(): Promise<string> {
         const atendeeList = await this.atendeeService.findAll();
-        return `Atendees: [${atendeeList.toString()}]\nQueue: [${this.queue.toString()}]`;
+        const demandList = await this.demandService.findAll();
+        return `Atendees: [${atendeeList.toString()}]\nQueue: [${demandList.toString()}]`;
     }
 
     public getName(): string {
@@ -51,11 +66,19 @@ export class AgencyService {
         this.manager = name;
     }
 
-    public getAtendeeService(){
+    public getAtendeeService() {
         return this.atendeeService;
     }
 
     public setAtendeeService(atendeeService: AtendeeService){
         this.atendeeService = atendeeService;
     }
-}   
+
+    public getDemandService() {
+        return this.demandService;
+    }
+
+    public setDemandService(demandService: DemandService) {
+        this.demandService = demandService;
+    }
+}

@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AtendeeModule } from './atendee/atendee.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgencyModule } from './BurgosAgency/agency.module';
+import { DemandModule } from './demand/demand.module';
 
 
 @Module({
@@ -14,7 +15,9 @@ import { AgencyModule } from './BurgosAgency/agency.module';
       database: 'burgosDB',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-    })],
+    }),
+
+    DemandModule],
   controllers: [],
   providers: [],
 })
