@@ -22,6 +22,14 @@ export class AgencyService {
         }
     }
 
+    async deleteAtendee(attendee: Atendee) {
+        try{
+            await this.atendeeService.delete(attendee.id);
+       } catch (e){
+            throw new Error(e.message)
+        }
+    }
+
     async getStatus(): Promise<string> {
         const atendeeList = await this.atendeeService.findAll();
         return `Atendees: [${atendeeList.toString()}]\nQueue: [${this.queue.toString()}]`;
