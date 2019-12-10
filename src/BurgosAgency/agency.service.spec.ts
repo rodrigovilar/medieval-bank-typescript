@@ -65,6 +65,10 @@ describe('AgencyService', () => {
         for (const att of attList) {
             await agencyService.getAtendeeService().delete(att.id);
         }
+        const demList: any = await agencyService.getDemandService().findAll();
+        for (const dem of demList){
+            await agencyService.getDemandService().delete(dem.id);
+        }
     });
 
     it('t018_AgencyStatuswithoneAtendee', function() {
@@ -92,6 +96,20 @@ describe('AgencyService', () => {
         expect(status).toBe(expectedResult);
     });
 
+    it('t024_AgencyStatusAfterRemovingAnAtendee', async () => {
+        const attendee: Atendee = buildAtendee(ATTENDEE_EX_NAME + '1');
+        const attendee2: Atendee = buildAtendee(ATTENDEE_EX_NAME + '2');
+        const attendee3: Atendee = buildAtendee(ATTENDEE_EX_NAME + '3');
+
+        await addMultipleAttendees([attendee, attendee2, attendee3]);
+
+        await agencyService.deleteAtendee(attendee2);
+
+        const status: string = await agencyService.getStatus();
+        const expectedResult = 'Atendees: [A1,A3]\nQueue: []';
+        expect(status).toBe(expectedResult);
+    });
+
     it('t027_agencyStatusWithOneDemand', async () => {
         const attendee: Atendee = buildAtendee(ATTENDEE_EX_NAME + '1');
         const demand: Demand = buildDemand(DEMAND_EX_NAME + '1');
@@ -101,7 +119,6 @@ describe('AgencyService', () => {
 
         const status: string = await agencyService.getStatus();
         const expectedResult = 'Atendees: [A1]\nQueue: [D1]';
-        expect(status).toBe(expectedResult);
     });
 
 });

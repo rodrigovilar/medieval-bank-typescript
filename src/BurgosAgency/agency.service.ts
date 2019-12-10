@@ -36,6 +36,14 @@ export class AgencyService {
         }
     }
 
+    async deleteAtendee(attendee: Atendee) {
+        try{
+            await this.atendeeService.delete(attendee.id);
+       } catch (e){
+            throw new Error(e.message)
+        }
+    }
+
     async getStatus(): Promise<string> {
         const atendeeList = await this.atendeeService.findAll();
         const demandList = await this.demandService.findAll();
