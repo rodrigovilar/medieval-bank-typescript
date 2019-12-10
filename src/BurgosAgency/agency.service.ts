@@ -1,5 +1,6 @@
 import { AtendeeService } from "src/atendee/atendee/atendee.service";
 import { Injectable } from "@nestjs/common";
+import { Atendee } from "src/atendee/atendee.entity";
 
 @Injectable()
 export class AgencyService {
@@ -11,6 +12,14 @@ export class AgencyService {
 
     constructor(){
         
+    }
+    
+    async addAtendee(attendee: Atendee) {
+        try{
+            await this.atendeeService.create(attendee);
+        } catch (e){
+            throw new Error(e.message);
+        }
     }
 
     async getStatus(): Promise<string> {

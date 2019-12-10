@@ -19,7 +19,9 @@ export class AtendeeService {
     this.validateWithoutName(atendee);
     await this.validateId(atendee);
     await this.validateDuplicatedName(atendee);
-    this.validateEmail(atendee);
+    if (atendee.email) {
+      this.validateEmail(atendee);
+    }
     this.validateDate(atendee);
     atendee.date = new Date();
     return await this.atendeeRepository.save(atendee);
