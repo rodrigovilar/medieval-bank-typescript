@@ -7,7 +7,7 @@ import {AgencyModule} from './agency.module';
 import {Demand} from '../demand/demand.entity';
 import {DemandService} from '../demand/demand.service';
 
-describe('AgencyService', () => {
+describe('AgencyServiceTest', () => {
     let agencyService: AgencyService;
 
     const ATTENDEE_EX_NAME: string = 'A';
@@ -135,6 +135,25 @@ describe('AgencyService', () => {
 
         await agencyService.increaseTick();
         expect(agencyService.getTick()).toBe(2);
+    });
+
+    it('t033_agencyStatusWithTickAndDemand', async () => {
+        const d1: Demand = buildDemand(DEMAND_EX_NAME + '1');
+        const d2: Demand = buildDemand(DEMAND_EX_NAME + '2');
+        const d3: Demand = buildDemand(DEMAND_EX_NAME + '3');
+
+        await addMultipleDemand([d1, d2, d3]);
+
+        const expectedResult = 'Atendees: []\nQueue: [D1,D2,D3]';
+
+        let status: string = await agencyService.getStatus();
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(0);
+
+        await agencyService.increaseTick();
+        status = await agencyService.getStatus();
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(1);
     });
 
 });
