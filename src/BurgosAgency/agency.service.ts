@@ -1,19 +1,58 @@
-import { AtendeeService } from "src/atendee/atendee/atendee.service";
-import { Injectable } from "@nestjs/common";
+import { AtendeeService } from 'src/atendee/atendee/atendee.service';
+import { Injectable } from '@nestjs/common';
+import { Atendee } from 'src/atendee/atendee.entity';
+import {DemandService} from '../demand/demand.service';
+import {Demand} from '../demand/demand.entity';
 
 @Injectable()
 export class AgencyService {
-    
     private atendeeService: AtendeeService;
+    private demandService: DemandService;
     private name: string;
     private manager: string;
+    private tick: number = 0;
+    private queue: any [] = [];
 
-    constructor(){
-        
+    async addAtendee(attendee: Atendee) {
+        try {
+            await this.atendeeService.create(attendee);
+        } catch (e) {
+            throw new Error(e.message);
+        }
     }
 
-    getStatus(): any {
-        throw new Error("Method not implemented.");
+    async increaseTick() {
+        this.tick++;
+    }
+
+    async addDemand(demand: Demand) {
+        try {
+            await this.demandService.create(demand);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    }
+
+    async deleteDemand(demand: Demand) {
+        try {
+            await this.demandService.delete(demand.id);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+    }
+
+    async deleteAtendee(attendee: Atendee) {
+        try {
+            await this.atendeeService.delete(attendee.id);
+       } catch (e) {
+            throw new Error(e.message);
+        }
+    }
+
+    async getStatus(): Promise<string> {
+        const atendeeList = await this.atendeeService.findAll();
+        const demandList = await this.demandService.findAll();
+        return `Atendees: [${atendeeList.toString()}]\nQueue: [${demandList.toString()}]`;
     }
 
     public getName(): string {
@@ -24,7 +63,7 @@ export class AgencyService {
         this.name = name;
     }
 
-    public getManager(): string{
+    public getManager(): string {
         return this.manager;
     }
 
@@ -32,11 +71,27 @@ export class AgencyService {
         this.manager = name;
     }
 
-    public getAtendeeService(){
+    public getTick(): number {
+        return this.tick;
+    }
+
+    public setTick(tick: number): void {
+        this.tick = tick;
+    }
+
+    public getAtendeeService() {
         return this.atendeeService;
     }
 
-    public setAtendeeService(atendeeService: AtendeeService){
+    public setAtendeeService(atendeeService: AtendeeService) {
         this.atendeeService = atendeeService;
     }
-}   
+
+    public getDemandService() {
+        return this.demandService;
+    }
+
+    public setDemandService(demandService: DemandService) {
+        this.demandService = demandService;
+    }
+}

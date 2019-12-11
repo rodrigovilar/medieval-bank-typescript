@@ -58,6 +58,10 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+
+$ npm run test -i "test.file.name"
+
+$ npm run test -t "test name"
 ```
 
 ## Support
