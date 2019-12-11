@@ -52,7 +52,7 @@ export class AgencyService {
     async getStatus(): Promise<string> {
         const atendeeList = await this.atendeeService.findAll();
         const demandList = await this.demandService.findAll();
-        return `Atendees: [${atendeeList.toString()}]\nQueue: [${demandList.toString()}]\nTick: ${this.tick}`;
+        return `Atendees: [${atendeeList.toString()}]\nQueue: [${demandList.toString()}]`;
     }
 
     public getName(): string {
@@ -69,6 +69,14 @@ export class AgencyService {
 
     public setManager(name: string): void {
         this.manager = name;
+    }
+
+    public getTick(): number {
+        return this.tick;
+    }
+
+    public setTick(tick: number): void {
+        this.tick = tick;
     }
 
     public getAtendeeService() {
