@@ -121,4 +121,17 @@ describe('AgencyService', () => {
         const expectedResult = 'Atendees: [A1]\nQueue: [D1]';
     });
 
+    it('t030_agencyStatusWithTick', async () => {
+        let status: string = await agencyService.getStatus();
+        let expectedResult = 'Atendees: []\nQueue: []\nTick: 0';
+
+        await agencyService.increaseTick();
+        status = await agencyService.getStatus();
+        expectedResult = 'Atendees: []\nQueue: []\nTick: 1';
+
+        await agencyService.increaseTick();
+        status = await agencyService.getStatus();
+        expectedResult = 'Atendees: []\nQueue: []\nTick: 2';
+    });
+
 });
