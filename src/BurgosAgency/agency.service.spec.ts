@@ -59,14 +59,14 @@ describe('AgencyServiceTest', () => {
     });
 
     afterEach(async () => {
-        const attList: any = await agencyService.getAtendeeService().findAll();
-        for (const att of attList) {
-            await agencyService.getAtendeeService().delete(att.id);
-        }
-        const demList: any = await agencyService.getDemandService().findAll();
-        for (const dem of demList) {
-            await agencyService.getDemandService().delete(dem.id);
-        }
+        await agencyService.getAtendeeService().deleteAll();
+        await agencyService.getDemandService().deleteAll();
+        agencyService.setTick(0);
+    });
+
+    beforeEach(async () => {
+        await agencyService.getAtendeeService().deleteAll();
+        await agencyService.getDemandService().deleteAll();
         agencyService.setTick(0);
     });
 
