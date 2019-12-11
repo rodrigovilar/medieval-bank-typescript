@@ -10,6 +10,7 @@ export class AgencyService {
     private demandService: DemandService;
     private name: string;
     private manager: string;
+    private tick: number = 0;
     private queue: any [] = [];
 
     async addAtendee(attendee: Atendee) {
@@ -18,6 +19,10 @@ export class AgencyService {
         } catch (e) {
             throw new Error(e.message);
         }
+    }
+
+    async increaseTick() {
+        this.tick++;
     }
 
     async addDemand(demand: Demand) {
@@ -37,17 +42,17 @@ export class AgencyService {
     }
 
     async deleteAtendee(attendee: Atendee) {
-        try{
+        try {
             await this.atendeeService.delete(attendee.id);
-       } catch (e){
-            throw new Error(e.message)
+       } catch (e) {
+            throw new Error(e.message);
         }
     }
 
     async getStatus(): Promise<string> {
         const atendeeList = await this.atendeeService.findAll();
         const demandList = await this.demandService.findAll();
-        return `Atendees: [${atendeeList.toString()}]\nQueue: [${demandList.toString()}]`;
+        return `Atendees: [${atendeeList.toString()}]\nQueue: [${demandList.toString()}]\nTick: ${this.tick}`;
     }
 
     public getName(): string {
@@ -58,7 +63,7 @@ export class AgencyService {
         this.name = name;
     }
 
-    public getManager(): string{
+    public getManager(): string {
         return this.manager;
     }
 
@@ -70,7 +75,7 @@ export class AgencyService {
         return this.atendeeService;
     }
 
-    public setAtendeeService(atendeeService: AtendeeService){
+    public setAtendeeService(atendeeService: AtendeeService) {
         this.atendeeService = atendeeService;
     }
 
