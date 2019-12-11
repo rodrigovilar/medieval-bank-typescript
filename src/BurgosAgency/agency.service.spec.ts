@@ -7,7 +7,7 @@ import {AgencyModule} from './agency.module';
 import {Demand} from '../demand/demand.entity';
 import {DemandService} from '../demand/demand.service';
 
-describe('AgencyService', () => {
+describe('AgencyServiceTest', () => {
     let agencyService: AgencyService;
 
     const ATTENDEE_EX_NAME: string = 'A';
@@ -58,7 +58,6 @@ describe('AgencyService', () => {
         agencyService.setDemandService(await module.get(DemandService));
     });
 
-    // afterAll(async () => await serviceHelper.deleteAll(atendeeService));
 
     afterEach(async () => {
         const attList: any = await agencyService.getAtendeeService().findAll();
@@ -71,10 +70,13 @@ describe('AgencyService', () => {
         }
     });
 
-    it('t018_AgencyStatuswithoneAtendee', function() {
-        agencyService.setName('Burgosland');
-        let result = agencyService.getName();
-        expect(result).toBe('Burgosland');
+    it('t018_AgencyStatuswithoneAttendee', async function() {
+      const attendee: Atendee = buildAtendee(ATTENDEE_EX_NAME + '1');
+      await addMultipleAttendees([attendee]);
+      const status: string = await agencyService.getStatus();
+
+      const expectedResult = 'Atendees: [A1]\nQueue: []';
+      expect(status).toBe(expectedResult);
     });
 
     it('t015_agencyStatusWithoutAttendee', async () => {
@@ -119,6 +121,39 @@ describe('AgencyService', () => {
 
         const status: string = await agencyService.getStatus();
         const expectedResult = 'Atendees: [A1]\nQueue: [D1]';
+        expect(status).toBe(expectedResult);
+    });
+
+    it('t030_agencyStatusWithTick', async () => {
+        const status: string = await agencyService.getStatus();
+        const expectedResult = 'Atendees: []\nQueue: []';
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(0);
+
+        await agencyService.increaseTick();
+        expect(agencyService.getTick()).toBe(1);
+
+        await agencyService.increaseTick();
+        expect(agencyService.getTick()).toBe(2);
+    });
+
+    it('t033_agencyStatusWithTickAndDemand', async () => {
+        const d1: Demand = buildDemand(DEMAND_EX_NAME + '1');
+        const d2: Demand = buildDemand(DEMAND_EX_NAME + '2');
+        const d3: Demand = buildDemand(DEMAND_EX_NAME + '3');
+
+        await addMultipleDemand([d1, d2, d3]);
+
+        const expectedResult = 'Atendees: []\nQueue: [D1,D2,D3]';
+
+        let status: string = await agencyService.getStatus();
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(0);
+
+        await agencyService.increaseTick();
+        status = await agencyService.getStatus();
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(1);
     });
 
 });

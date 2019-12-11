@@ -10,6 +10,7 @@ export class AgencyService {
     private demandService: DemandService;
     private name: string;
     private manager: string;
+    private tick: number = 0;
     private queue: any [] = [];
 
     async addAtendee(attendee: Atendee) {
@@ -18,6 +19,10 @@ export class AgencyService {
         } catch (e) {
             throw new Error(e.message);
         }
+    }
+
+    async increaseTick() {
+        this.tick++;
     }
 
     async addDemand(demand: Demand) {
@@ -37,10 +42,10 @@ export class AgencyService {
     }
 
     async deleteAtendee(attendee: Atendee) {
-        try{
+        try {
             await this.atendeeService.delete(attendee.id);
-       } catch (e){
-            throw new Error(e.message)
+       } catch (e) {
+            throw new Error(e.message);
         }
     }
 
@@ -58,7 +63,7 @@ export class AgencyService {
         this.name = name;
     }
 
-    public getManager(): string{
+    public getManager(): string {
         return this.manager;
     }
 
@@ -66,11 +71,19 @@ export class AgencyService {
         this.manager = name;
     }
 
+    public getTick(): number {
+        return this.tick;
+    }
+
+    public setTick(tick: number): void {
+        this.tick = tick;
+    }
+
     public getAtendeeService() {
         return this.atendeeService;
     }
 
-    public setAtendeeService(atendeeService: AtendeeService){
+    public setAtendeeService(atendeeService: AtendeeService) {
         this.atendeeService = atendeeService;
     }
 
