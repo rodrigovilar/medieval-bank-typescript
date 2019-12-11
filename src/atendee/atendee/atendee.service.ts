@@ -34,7 +34,7 @@ export class AtendeeService {
 
   // READ BY ID
   async getOne(id: number): Promise<Atendee> {
-    return await this.atendeeRepository.findOne({ id: id });
+    return await this.atendeeRepository.findOne(id);
   }
 
 
@@ -62,21 +62,20 @@ export class AtendeeService {
       throw new Error('Atendee name cannot be duplicated')
     }
 
-    this.validadeEmail(atendee);
+    this.validateEmail(atendee);
 
     this.atendeeRepository.update(atendee.id, atendee);
     return await this.getOne(atendee.id);
   }
 
   // DELETE
-  async delete(id): Promise<DeleteResult> {
-    let searchedAtendee = await this.getOne(id);
+  async delete(id: number): Promise<DeleteResult> {
+    await this.validateDelete(id);
+    return await this.atendeeRepository.delete(id);
+  }
 
-    if (searchedAtendee) { // is not undefined
-      return await this.atendeeRepository.delete(id);
-    }
-    throw new Error(`Atendee not found id: ${id}`);
-
+  async deleteAll() {
+    return await this.atendeeRepository.clear();
   }
 
   async filterByField(field: string, value: string): Promise<Atendee[]> {
@@ -93,7 +92,7 @@ export class AtendeeService {
   }
 
 
-  private validadeEmail(atendee: Atendee): void {
+  private validateEmail(atendee: Atendee): void {
     let rgx = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
     if (!rgx.test(atendee.email)) {
@@ -136,22 +135,18 @@ export class AtendeeService {
       throw new AtendeeException('Atendee name cannot be duplicated');
   }
 
-  private validateEmail(atendee: Atendee): void {
-    let regexp = new RegExp(
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-    let serchfind = regexp.test(atendee.email);
-
-    if (serchfind == false)
-      throw new AtendeeException('Atendee e-mail format is invalid');
-  }
-
 
   private validateDate(atendee: Atendee): void {
     if (atendee.date != null)
       throw new AtendeeException('Atendee date cannot be set');
   }
 
+  private async validateDelete(id: number) {
+    let createdAtendee = await this.getOne(id);
 
+    if (createdAtendee == undefined) {
+      throw new AtendeeException('Atendee not found id: ' + id);
+    }
+  }
 
 }
