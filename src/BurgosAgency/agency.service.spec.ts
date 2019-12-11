@@ -119,19 +119,20 @@ describe('AgencyService', () => {
 
         const status: string = await agencyService.getStatus();
         const expectedResult = 'Atendees: [A1]\nQueue: [D1]';
+        expect(status).toBe(expectedResult);
     });
 
     it('t030_agencyStatusWithTick', async () => {
-        let status: string = await agencyService.getStatus();
-        let expectedResult = 'Atendees: []\nQueue: []\nTick: 0';
+        const status: string = await agencyService.getStatus();
+        const expectedResult = 'Atendees: []\nQueue: []';
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(0);
 
         await agencyService.increaseTick();
-        status = await agencyService.getStatus();
-        expectedResult = 'Atendees: []\nQueue: []\nTick: 1';
+        expect(agencyService.getTick()).toBe(1);
 
         await agencyService.increaseTick();
-        status = await agencyService.getStatus();
-        expectedResult = 'Atendees: []\nQueue: []\nTick: 2';
+        expect(agencyService.getTick()).toBe(2);
     });
 
 });
