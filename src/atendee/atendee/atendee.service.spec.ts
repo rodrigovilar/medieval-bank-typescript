@@ -40,17 +40,14 @@ describe('AtendeeService', () => {
   });
 
   afterAll(async () => await serviceHelper.deleteAll(service));
-
   afterEach(async () => await serviceHelper.deleteAll(service));
-
 
   it('should be defined', async () => {
     expect(service).toBeDefined();
   });
 
-  // --------------- INICIO RUAN
   test('t01_createAtendee', async () => {
-    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, null);
+    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Diego', null, EXAMPLE_EMAIL, null);
     let searchedAtendee = await service.getOne(createdAtendee.id)
 
     expect(createdAtendee).toEqual(searchedAtendee);
@@ -81,6 +78,7 @@ describe('AtendeeService', () => {
     // creating second atendee
     let atendee2 = new Atendee();
 
+    atendee2.id = null;
     atendee2.name = EXAMPLE_NAME; // The same name!
     atendee2.email = EXAMPLE_EMAIL;
     atendee2.ssn = EXAMPLE_SSN;
@@ -89,18 +87,7 @@ describe('AtendeeService', () => {
 
     const expectedExceptionMessage: string = "Atendee name cannot be duplicated";
 
-
-
-    // try {
-    //   await service.create(atendee2);
-    //   console.log('Deu error')
-    //   fail(failMessage);
-    // } catch (error) {
-    //   expect(error.message).toEqual(expectedExceptionMessage);
-    // }
-
-
-    let atendee = await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
+    await serviceHelper.tryCreateAtendeeWithError(service, atendee2, failMessage, expectedExceptionMessage);
   });
 
   test('t04_createAtendeeWithAutomaticFields', async () => {
@@ -132,7 +119,7 @@ describe('AtendeeService', () => {
   test('t05_createAtendeeWithInvalidEmail', async () => {
 
     let atendee = new Atendee();
-    atendee.name = EXAMPLE_NAME;
+    atendee.name = 'Zé do Berrante';
 
     const failMessage = "Test failed because the system accepted to create atendee with invalid e-mail format";
     const expectedExceptionMessage = "Atendee e-mail format is invalid";
@@ -146,12 +133,10 @@ describe('AtendeeService', () => {
     atendee.email = 'sdsdfa@gmail';
     await serviceHelper.tryCreateAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
   });
-  // --------------- FINAL  RUAN
-
 
   test('t06_updateAtendee', async () => {
 
-    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Rogério', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     // updating fields
     const otherEmail: string = 'other@email.com';
@@ -160,7 +145,7 @@ describe('AtendeeService', () => {
 
     let updatedAtendee = await service.update(createdAtendee);
 
-    serviceHelper.validateAtendee(EXAMPLE_NAME, otherEmail, updatedAtendee);
+    serviceHelper.validateAtendee('Rogério', otherEmail, updatedAtendee);
 
     expect(updatedAtendee.date).toEqual(createdAtendee.date);
 
@@ -172,7 +157,7 @@ describe('AtendeeService', () => {
 
   test('t07_updateAtendeeWithImmutableFields', async () => {
 
-    let createdAtendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee = await serviceHelper.createAtendee(service, null, 'Miguel', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.ssn = '670-03-8924';
 
@@ -188,17 +173,17 @@ describe('AtendeeService', () => {
 
     let atendeeUnknownId: Atendee = new Atendee();
     atendeeUnknownId.id = UNKNOWN;
-    atendeeUnknownId.name = EXAMPLE_NAME;
+    atendeeUnknownId.name = 'Davi';
 
     let failMessage: string = 'Test failed because the system accepted to update atendee with unknown id';
     let expectedExceptionMessage: string = `Atendee id not found: ${UNKNOWN}`;
 
     await serviceHelper.tryUpdateAtendeeWithError(service, atendeeUnknownId, failMessage, expectedExceptionMessage);
 
-    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, 'Alice', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.id = UNKNOWN;
-    createdAtendee.name = 'Meytal cohen';
+    createdAtendee.name = 'Arthur';
     createdAtendee.email = 'meytal.cohen@gmail.com';
 
     failMessage = 'Test failed because the system accepted to update atendee with unknown id';
@@ -209,7 +194,7 @@ describe('AtendeeService', () => {
 
   test('t09_updateAtendeeWithoutName', async () => {
 
-    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, 'Pedro', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     createdAtendee.name = '';
     createdAtendee.email = '';
@@ -245,7 +230,7 @@ describe('AtendeeService', () => {
 
   test('t11_updateAtendeeWithAutomaticFields', async () => {
 
-    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let createdAtendee: Atendee = await serviceHelper.createAtendee(service, null, 'Matheus', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
     let creationDate = createdAtendee.date;
 
     setInterval(async () => { }, 1000)
@@ -266,7 +251,7 @@ describe('AtendeeService', () => {
 
   test('t12_updateAtendeeWithInvalidEmail', async () => {
 
-    let atendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let atendee: Atendee = await serviceHelper.createAtendee(service, null, 'Heitor', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     const failMessage = "Test failed because the system accepted to update atendee with invalid e-mail format";
     const expectedExceptionMessage = "Atendee e-mail format is invalid";
@@ -284,7 +269,7 @@ describe('AtendeeService', () => {
 
   test('t13_deleteAtendee', async () => {
 
-    let atendee: Atendee = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let atendee: Atendee = await serviceHelper.createAtendee(service, null, 'Enzo', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
 
     await service.delete(atendee.id);
 
@@ -309,27 +294,11 @@ describe('AtendeeService', () => {
 
     await serviceHelper.tryDeleteAtendeeWithError(service, atendee, failMessage, expectedExceptionMessage);
 
-    // let atendeeMeytal: Atendee = await serviceHelper.createAtendee(service, null, 'Meytal cohen', null, 'meytal@gmail.com', EXAMPLE_SSN);
-    // let atendeeBio: Atendee = await serviceHelper.createAtendee(service, null, 'Bio Gates', null, 'bio@gmail.com', EXAMPLE_SSN);
-    // let atendeeSpider: Atendee = await serviceHelper.createAtendee(service, null, 'Spider Man', null, 'spider@gmail.com', EXAMPLE_SSN);
-
-    // //
-    // searchedAtendee = await service.getOne(atendeeMeytal.id)
-    // serviceHelper.compareAtendees(atendeeMeytal, searchedAtendee);
-
-    // //
-    // searchedAtendee = await service.getOne(atendeeBio.id)
-    // serviceHelper.compareAtendees(atendeeBio, searchedAtendee);
-
-    // //
-    // searchedAtendee = await service.getOne(atendeeSpider.id)
-    // serviceHelper.compareAtendees(atendeeSpider, searchedAtendee);
-
   });
 
   test("t15_getAllAtendee", async () => {
 
-    let atendee1 = await serviceHelper.createAtendee(service, null, EXAMPLE_NAME, null, EXAMPLE_EMAIL, EXAMPLE_SSN);
+    let atendee1 = await serviceHelper.createAtendee(service, null, 'EXAMPLE_NAME', null, EXAMPLE_EMAIL, EXAMPLE_SSN);
     let atendee2 = await serviceHelper.createAtendee(service, null, 'Meytal Cohen', null, 'meytalcohen@gmail.com', '123-76-7120');
     let atendee3 = await serviceHelper.createAtendee(service, null, 'Bio Gates', null, 'bil.gates@hotmail.com', '623-76-2255');
 
@@ -356,19 +325,15 @@ describe('AtendeeService', () => {
     let filteredList: Atendee[] = await service.filterByField(field, equalTo);
     expect(filteredList.length).toEqual(0);
 
-
     // names
     field = 'name';
     equalTo = 'gates';
     filteredList = await service.filterByField(field, equalTo);
     expect(filteredList.length).toEqual(2);
-    //expect(filteredList[0]).toEqual(atendeeMeytal);
-    //expect(filteredList[1]).toEqual(atendeeBill);
 
     equalTo = 'b';
     filteredList = await service.filterByField(field, equalTo);
     expect(filteredList.length).toEqual(1);
-    // expect(filteredList[0]).toEqual(atendeeBill);
 
     equalTo = '4';
     filteredList = await service.filterByField(field, equalTo);
@@ -380,16 +345,10 @@ describe('AtendeeService', () => {
     equalTo = '83';
     filteredList = await service.filterByField(field, equalTo);
     expect(filteredList.length).toEqual(2);
-    // expect(filteredList[0]).toEqual(atendeeMeytal);
-    // expect(filteredList[1]).toEqual(atendeeBill);
 
-    // field = 'ssn';
     equalTo = '3';
     filteredList = await service.filterByField(field, equalTo);
     expect(filteredList.length).toEqual(3);
-    // expect(filteredList[0]).toEqual(atendee);
-    // expect(filteredList[1]).toEqual(atendeeMeytal);
-    // expect(filteredList[2]).toEqual(atendeeBill);
 
     // field = 'ssn';
     equalTo = '4';
@@ -402,14 +361,11 @@ describe('AtendeeService', () => {
     equalTo = 'gmail';
     filteredList = await service.filterByField(field, equalTo);
     expect(filteredList.length).toEqual(1);
-    // expect(filteredList[0]).toEqual(atendee);
-    // expect(filteredList[1]).toEqual(atendeeMeytal);
 
     // field = 'email';
     equalTo = 'hotmail';
     filteredList = await service.filterByField(field, equalTo);
     expect(filteredList.length).toEqual(1);
-    // expect(filteredList[0]).toEqual(atendeeBill);
 
     // field = 'email';
     equalTo = 'outlook';
