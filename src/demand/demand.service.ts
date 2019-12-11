@@ -27,4 +27,8 @@ export class DemandService {
     async findAll(): Promise<Demand[]> {
         return await this.demandRepository.find();
     }
+
+    async deleteAll() {
+        return await this.demandRepository.clear();
+    }
 }
