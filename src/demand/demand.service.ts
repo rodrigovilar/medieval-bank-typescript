@@ -28,7 +28,20 @@ export class DemandService {
         return await this.demandRepository.find();
     }
 
+    async findAllUnallocated(): Promise<Demand[]> {
+        return await this.demandRepository.find({alocated: false});
+    }
+
     async deleteAll() {
         return await this.demandRepository.clear();
+    }
+
+    async update(demand: Demand) {
+        const newDemand: Demand = new Demand();
+        newDemand.alocated = demand.alocated;
+        newDemand.id = demand.id;
+        newDemand.name = demand.name;
+
+        await this.demandRepository.update(demand.id, newDemand);
     }
 }

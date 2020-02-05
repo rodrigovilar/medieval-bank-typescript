@@ -1,6 +1,6 @@
-import { AtendeeService } from 'src/atendee/atendee/atendee.service';
-import { Injectable } from '@nestjs/common';
-import { Atendee } from 'src/atendee/atendee.entity';
+import {AtendeeService} from 'src/atendee/atendee/atendee.service';
+import {Injectable} from '@nestjs/common';
+import {Atendee} from 'src/atendee/atendee.entity';
 import {DemandService} from '../demand/demand.service';
 import {Demand} from '../demand/demand.entity';
 
@@ -23,6 +23,22 @@ export class AgencyService {
 
     async increaseTick() {
         this.tick++;
+        const attendeeList = await this.atendeeService.getAvailableAttendees();
+        this.queue = await this.demandService.findAllUnallocated();
+        for (const att of attendeeList) {
+            if (this.queue.length > 0) {
+                await this.linkDemandToAttendee(this.queue.pop(), att);
+            } else {
+                return;
+            }
+        }
+    }
+
+    async linkDemandToAttendee(demand: Demand, attendee: Atendee) {
+        attendee.demand = demand;
+        demand.alocated = true;
+        await this.demandService.update(demand);
+        await this.atendeeService.update(attendee);
     }
 
     async addDemand(demand: Demand) {
@@ -44,14 +60,14 @@ export class AgencyService {
     async deleteAtendee(attendee: Atendee) {
         try {
             await this.atendeeService.delete(attendee.id);
-       } catch (e) {
+        } catch (e) {
             throw new Error(e.message);
         }
     }
 
     async getStatus(): Promise<string> {
         const atendeeList = await this.atendeeService.findAll();
-        const demandList = await this.demandService.findAll();
+        const demandList = await this.demandService.findAllUnallocated();
         return `Atendees: [${atendeeList.toString()}]\nQueue: [${demandList.toString()}]`;
     }
 

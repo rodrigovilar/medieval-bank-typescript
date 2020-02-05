@@ -156,4 +156,25 @@ describe('AgencyServiceTest', () => {
         expect(agencyService.getTick()).toBe(1);
     });
 
+    it('t036_agencyStatusWithTickQueueAndAttendee', async () => {
+        const d1: Demand = buildDemand(DEMAND_EX_NAME + '1');
+        const a1: Atendee = buildAtendee(ATTENDEE_EX_NAME + '1');
+        a1.email = 'a@mail.com';
+
+        await addMultipleAttendees([a1]);
+        await addMultipleDemand([d1]);
+
+        let expectedResult = 'Atendees: [A1]\nQueue: [D1]';
+        let status = await agencyService.getStatus();
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(0);
+
+        await agencyService.increaseTick();
+
+        expectedResult = 'Atendees: [A1->D1]\nQueue: []';
+        status = await agencyService.getStatus();
+        expect(status).toBe(expectedResult);
+        expect(agencyService.getTick()).toBe(1);
+    });
+
 });

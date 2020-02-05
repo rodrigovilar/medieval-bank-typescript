@@ -5,6 +5,8 @@ import { Atendee } from '../atendee.entity';
 import { Test } from '@nestjs/testing';
 import { AtendeeModule } from '../atendee.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DemandModule } from 'src/demand/demand.module';
+import { Demand } from 'src/demand/demand.entity';
 
 describe('AtendeeService', () => {
   let service: AtendeeService;
@@ -21,12 +23,12 @@ describe('AtendeeService', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [AtendeeModule,
+      imports: [AtendeeModule, DemandModule,
         // database
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: 'burgosDB',
-          entities: [Atendee],
+          entities: [Atendee, Demand],
           synchronize: true,
         })],
     }).compile();
