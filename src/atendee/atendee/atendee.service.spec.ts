@@ -5,8 +5,8 @@ import { Atendee } from '../atendee.entity';
 import { Test } from '@nestjs/testing';
 import { AtendeeModule } from '../atendee.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DemandModule } from 'src/demand/demand.module';
-import { Demand } from 'src/demand/demand.entity';
+import { DemandModule } from '../../demand/demand.module';
+import { Demand } from '../../demand/demand.entity';
 
 describe('AtendeeService', () => {
   let service: AtendeeService;
