@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn} from 'typeorm';
+import { Demand } from '../demand/demand.entity';
 
 // Entity decorator
 @Entity()
 export class Atendee {
-
 
     // primary key
     @PrimaryGeneratedColumn()
@@ -21,7 +21,15 @@ export class Atendee {
     @Column({ nullable: true })
     ssn: string;
 
-    toString(): string{
-        return this.name;
+    @OneToOne(type => Demand)
+    @JoinColumn()
+    demand: Demand;
+
+    toString(): string {
+        if (this.demand == null) {
+            return this.name;
+        } else {
+            return `${this.name}->${this.demand.name}`;
+        }
     }
 }

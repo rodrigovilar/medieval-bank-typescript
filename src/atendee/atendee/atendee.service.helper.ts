@@ -73,6 +73,7 @@ export class AtendeeServiceHelper {
         atendee.name = name;
         atendee.date = date;
         atendee.email = email;
+        atendee.demand = null;
         atendee.ssn = ssn;
 
         let createdAtendee = await service.create(atendee)

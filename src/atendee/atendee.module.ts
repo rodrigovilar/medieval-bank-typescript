@@ -3,19 +3,22 @@ import { AtendeeService } from './atendee/atendee.service';
 import { AtendeeController } from './atendee/atendee.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Atendee } from './atendee.entity';
+import {DemandModule} from '../demand/demand.module';
+import { Demand } from '../demand/demand.entity';
 
 @Module({
 
   imports: [
-    TypeOrmModule.forFeature([Atendee])
+      DemandModule,
+      TypeOrmModule.forFeature([Atendee, Demand]),
   ],
   providers: [
-    AtendeeService
+    AtendeeService,
   ],
   exports: [
     TypeOrmModule,
-    AtendeeService
+    AtendeeService,
   ],
-  controllers: [AtendeeController]
+  controllers: [AtendeeController],
 })
 export class AtendeeModule { }

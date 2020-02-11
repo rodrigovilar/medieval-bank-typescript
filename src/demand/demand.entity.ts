@@ -9,6 +9,9 @@ export class Demand {
     @Column({nullable: false})
     name: string;
 
+    @Column({nullable: false, default: false})
+    alocated: boolean;
+
     toString() {
         return this.name;
     }
